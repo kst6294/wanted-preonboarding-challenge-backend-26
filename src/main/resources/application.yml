@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: wanted-market
+  output:
+    ansi:
+      enabled: always
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:market
+    username: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        highlight_sql: true
