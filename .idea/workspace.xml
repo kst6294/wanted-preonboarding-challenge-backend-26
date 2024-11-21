@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b649722e-c0b4-4db3-8bfb-cee11d01be59" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/wanted-preonboarding-challenge-backend-26.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/TestDataInit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/domain/item/Item.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/domain/item/State.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/domain/member/Member.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/login/SessionConst.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/login/interceptor/LoginCheckInterceptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/login/service/LoginService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/repository/ItemRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/repository/MemberRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/web/HomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/web/item/ItemController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/web/login/LoginController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/web/login/LoginDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/java/wanted/marketapi/web/member/MemberController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/messages.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/static/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/items/addForm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/items/editForm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/items/item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/items/items.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/login/loginForm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/loginHome.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market-api/src/main/resources/templates/members/addMemberForm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/MarketApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/item/domain/entity/Item.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/item/domain/entity/ItemStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/item/repository/ItemRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/member/domain/entity/Member.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/member/repository/MemberRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/trade/domain/entity/Trade.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/trade/domain/entity/TradeStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/java/wanted/market/trade/repository/TradeRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/test/java/wanted/market/MarketApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/market/src/test/java/wanted/market/db/DbTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/market-api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/market-api/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/market-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/market-api/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;cjw0324&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cjw0324/wanted-preonboarding-challenge-backend-26.git&quot;,
+    &quot;accountId&quot;: &quot;8eb0a5e0-86fe-460b-bb6b-306b21723926&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2p4htqIIUfyglUDhcnWLWKmbeOG" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/jaewoo-choi&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/choijaewoo/cjw/study/wanted-preonboarding-challenge/wanted-preonboarding-challenge-backend-26&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.intellij.kubernetes.view.ui.settings.KubernetesViewConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b649722e-c0b4-4db3-8bfb-cee11d01be59" name="Changes" comment="" />
+      <created>1732031473044</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732031473044</updated>
+      <workItem from="1732031474173" duration="380000" />
+      <workItem from="1732083817433" duration="2258000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
