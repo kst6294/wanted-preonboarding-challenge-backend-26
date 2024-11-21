@@ -1,18 +1,18 @@
 package com.market.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
 @Getter
+@Builder
 public class Products {
 
     @Id
@@ -39,7 +39,4 @@ public class Products {
     @UpdateTimestamp
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderProducts> orderProducts = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.market.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigInteger;
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 @Entity
 @Table(name = "order_products")
 @Getter
+@Builder
 public class OrderProducts {
 
     @Id
