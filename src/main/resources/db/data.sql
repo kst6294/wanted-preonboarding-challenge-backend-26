@@ -4,6 +4,10 @@ INSERT INTO customers (email, password, name, phone, role)
 VALUES ('user2@gmail.com', 'user2', 'user2', '01022222222', default);
 INSERT INTO customers (email, password, name, phone, role)
 VALUES ('user3@gmail.com', 'user3', 'user3', '01033333333', default);
+INSERT INTO customers (email, password, name, phone, role)
+VALUES ('user4@gmail.com', 'user4', 'user4', '01044444444', default);
+INSERT INTO customers (email, password, name, phone, role)
+VALUES ('user5@gmail.com', 'user5', 'user5', '01055555555', default);
 
 INSERT INTO products (name, price, quantity, reservation_status)
 VALUES ('제품1', 100, 50, default);

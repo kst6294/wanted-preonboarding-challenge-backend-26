@@ -1,8 +1,7 @@
 package com.market.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -10,6 +9,9 @@ import java.math.BigInteger;
 @Table(name = "order_products")
 @Getter
 @Builder
+@ToString(exclude = "orderId")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class OrderProducts {
 
     @Id
@@ -19,6 +21,7 @@ public class OrderProducts {
     @Column(nullable = false, columnDefinition = "DECIMAL(65, 0)")
     private BigInteger amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status", nullable = false, columnDefinition = "VARCHAR(20)")
     private ReservationStatus reservationStatus;
 
