@@ -1,4 +1,4 @@
-package com.market.domain.dto;
+package com.market.request;
 
 import java.math.BigInteger;
 

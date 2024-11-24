@@ -1,4 +1,4 @@
-package com.market.domain.dto;
+package com.market.response;
 
 import com.market.domain.entity.ReservationStatus;
 import com.querydsl.core.annotations.QueryProjection;

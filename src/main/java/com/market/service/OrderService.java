@@ -1,15 +1,16 @@
 package com.market.service;
 
-import com.market.domain.dto.OrderRequest;
-import com.market.domain.dto.SimpleOrderResponse;
 import com.market.domain.entity.*;
 import com.market.repository.CustomerRepository;
 import com.market.repository.OrderProductRepository;
 import com.market.repository.OrderRepository;
 import com.market.repository.ProductRepository;
+import com.market.request.OrderRequest;
+import com.market.response.SimpleOrderResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -64,5 +65,21 @@ public class OrderService {
         log.info("findByMerchantUid order= {}", order);
 
         return order;
+    }
+
+    @Transactional
+    public void updateReservationDone(Long id) {
+        Orders order = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+        order.getOrderProducts().setReservationStatus(ReservationStatus.DONE);
+    }
+
+    public void deleteOrder(String merchantUid) {
+        SimpleOrderResponse order = orderRepository.findByMerchantUid(merchantUid);
+        if (order == null) {
+            throw new IllegalArgumentException("존재하지 않는 주문입니다.");
+        }
+
+        orderRepository.deleteById(order.id());
     }
 }

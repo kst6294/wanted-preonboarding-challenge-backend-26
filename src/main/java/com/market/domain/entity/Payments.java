@@ -1,7 +1,7 @@
 package com.market.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payments")
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Payments {
 
     @Id
@@ -27,12 +30,18 @@ public class Payments {
     @Column(nullable = false, columnDefinition = "DECIMAL(65, 0)")
     private BigInteger amount;
 
+    @Setter
+    @Column(nullable = false, columnDefinition = "DECIMAL(65, 0)")
+    private BigInteger cancelAmount;
+
     @Column(name = "pay_method", length = 10)
     private String payMethod;
 
+    @Setter
     @Column(length = 20, nullable = false)
     private String status;
 
+    @Setter
     @Column(name = "paid_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime paidAt;
 

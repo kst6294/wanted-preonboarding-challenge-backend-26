@@ -1,6 +1,6 @@
 package com.market.repository;
 
-import com.market.domain.dto.SimpleOrderResponse;
+import com.market.response.SimpleOrderResponse;
 
 public interface QOrderRepository {
 

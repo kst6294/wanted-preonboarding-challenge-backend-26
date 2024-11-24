@@ -26,3 +26,9 @@ spring:
     init:
       mode: always
       data-locations: classpath*:db/data.sql
+
+imp:
+  api:
+    v1:
+      key: imp_apikey
+      secret: ekKoeW8RyKuT0zgaZsUtXXTLQ4AhPFW

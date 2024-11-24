@@ -1,7 +1,7 @@
 package com.market.repository;
 
-import com.market.domain.dto.QSimpleOrderResponse;
-import com.market.domain.dto.SimpleOrderResponse;
+import com.market.response.QSimpleOrderResponse;
+import com.market.response.SimpleOrderResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

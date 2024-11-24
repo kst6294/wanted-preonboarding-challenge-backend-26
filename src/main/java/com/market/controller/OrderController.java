@@ -1,7 +1,7 @@
 package com.market.controller;
 
-import com.market.domain.dto.OrderRequest;
-import com.market.domain.dto.SimpleOrderResponse;
+import com.market.request.OrderRequest;
+import com.market.response.SimpleOrderResponse;
 import com.market.domain.entity.Orders;
 import com.market.service.OrderService;
 import lombok.RequiredArgsConstructor;

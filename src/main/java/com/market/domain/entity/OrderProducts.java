@@ -21,6 +21,7 @@ public class OrderProducts {
     @Column(nullable = false, columnDefinition = "DECIMAL(65, 0)")
     private BigInteger amount;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status", nullable = false, columnDefinition = "VARCHAR(20)")
     private ReservationStatus reservationStatus;
