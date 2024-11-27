@@ -55,15 +55,22 @@ public class PaymentController {
             @ApiResponse(responseCode = "404", description = "사용자 찾을 수 없음"),
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
-    @Parameter(examples = {
-            @ExampleObject(name = "examplePaymentModel", value = """ 
+    @Parameter(
+            name = "payment",
+            description = "결제 정보",
+            required = true,
+            examples = @ExampleObject(
+                    name = "examplePaymentDto",
+                    value = """ 
                         { 
-                            "paymentNo" : "결제 번호",
-                            "productId" : "제품 id", 
-                            "sellerId" : "판매자 id", 
-                            "buyerId" : "구매자 id"
+                            "impUid" : "포트원 결제 id",
+                            "merchantUid" : "고객사 주문 고유 번호", 
+                            "payMethod" : "결제 수단", 
+                            "amount" : "결제 금액",
+                            "productId" : "제품 id",
+                            "buyerId" : "구매자 id",
                         } 
-                    """)})
+                    """))
     public ResponseEntity<PaymentEntity> save(@AuthenticationPrincipal UserDetail userDetail, @RequestBody PaymentDto payment) {
         return paymentService.save(userDetail, payment);
     }
