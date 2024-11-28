@@ -26,6 +26,8 @@ public class QPayments extends EntityPathBase<Payments> {
 
     public final NumberPath<Long> buyerId = createNumber("buyerId", Long.class);
 
+    public final NumberPath<java.math.BigInteger> cancelAmount = createNumber("cancelAmount", java.math.BigInteger.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath impUid = createString("impUid");

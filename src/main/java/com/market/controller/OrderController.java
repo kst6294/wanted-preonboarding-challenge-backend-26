@@ -4,6 +4,7 @@ import com.market.request.OrderRequest;
 import com.market.response.SimpleOrderResponse;
 import com.market.domain.entity.Orders;
 import com.market.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class OrderController {
 
     // TODO : 현재는 로그인이 없으므로 로그인한 사용자의 ID를 못찾으므로 body로 받는다고 가정한다
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<Void> save(@RequestBody @Valid OrderRequest orderRequest) {
         log.info("orderRequest= {}", orderRequest);
         Orders orders = orderService.save(orderRequest);
         if (orders == null) {

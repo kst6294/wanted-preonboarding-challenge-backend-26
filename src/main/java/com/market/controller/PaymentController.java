@@ -1,9 +1,11 @@
 package com.market.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.market.domain.entity.Payments;
 import com.market.request.PaymentCancelRequest;
 import com.market.request.PaymentUidRequest;
 import com.market.service.PaymentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/complete")
-    public ResponseEntity<Void> paymentComplete(@RequestBody PaymentUidRequest paymentUidRequest) {
+    public ResponseEntity<Void> paymentComplete(@RequestBody @Valid PaymentUidRequest paymentUidRequest) throws JsonProcessingException {
         log.info("paymentUidRequest= {}", paymentUidRequest);
         Payments payment = paymentService.complete(paymentUidRequest);
         if (payment == null) {

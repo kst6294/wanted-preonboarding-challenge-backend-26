@@ -1,9 +1,8 @@
 package com.market.service;
 
-import com.market.domain.dto.PaymentAnnotation;
-import com.market.domain.dto.PortOneAccessToken;
-import com.market.domain.dto.PortOneAuth;
-import com.market.domain.dto.PortOneCancel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.market.domain.dto.*;
 import com.market.domain.entity.Payments;
 import com.market.repository.PaymentRepository;
 import com.market.request.PaymentCancelRequest;
@@ -44,11 +43,15 @@ public class PaymentService {
     private String impSecret;
 
     @Transactional
-    public Payments complete(PaymentUidRequest paymentUidRequest) {
+    public Payments complete(PaymentUidRequest paymentUidRequest) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String auth = objectMapper.writeValueAsString(new PortOneAuth(impKey, impSecret));
+
         ResponseEntity<PortOneAccessToken> tokenResponse = restClient.post()
                 .uri(BASE_URL + "/users/getToken")
+                .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
-                .body(new PortOneAuth(impKey, impSecret))
+                .body(auth)
                 .retrieve()
                 .toEntity(PortOneAccessToken.class);
         if (tokenResponse.getStatusCode() != HttpStatus.OK) {
@@ -56,14 +59,14 @@ public class PaymentService {
             throw new IllegalStateException(tokenResponse.toString());
         }
 
-        PortOneAccessToken portOneAccessToken = tokenResponse.getBody();
-        if (portOneAccessToken == null) {
+        AuthAnnotation authAnnotation = tokenResponse.getBody().response();
+        if (authAnnotation == null) {
             throw new IllegalStateException("유효하지 않는 토큰입니다");
         }
 
         ResponseEntity<PaymentAnnotation> paymentResponse = restClient.get()
                 .uri(BASE_URL + "/payments/{impUid}", paymentUidRequest.impUid())
-                .header("Authorization", portOneAccessToken.accessToken())
+                .header("Authorization", authAnnotation.accessToken())
                 .accept(APPLICATION_JSON)
                 .retrieve()
                 .toEntity(PaymentAnnotation.class);
@@ -117,8 +120,8 @@ public class PaymentService {
             throw new IllegalStateException(tokenResponse.toString());
         }
 
-        PortOneAccessToken portOneAccessToken = tokenResponse.getBody();
-        if (portOneAccessToken == null) {
+        AuthAnnotation authAnnotation = tokenResponse.getBody().response();
+        if (authAnnotation == null) {
             throw new IllegalStateException("유효하지 않는 토큰입니다");
         }
 
@@ -136,7 +139,7 @@ public class PaymentService {
                 .uri(BASE_URL + "/payments/cancel")
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(APPLICATION_JSON);
-                    httpHeaders.set("Authorization", portOneAccessToken.accessToken());
+                    httpHeaders.set("Authorization", authAnnotation.accessToken());
                 })
                 .body(cancelData)
                 .retrieve()
