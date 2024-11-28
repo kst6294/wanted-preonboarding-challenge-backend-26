@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 목록</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>결제 목록</h1>
+<form id="cancelForm">
+    <table>
+        <thead>
+        <tr>
+            <th>선택</th>
+            <th>주문 번호</th>
+            <th>상품명</th>
+            <th>결제 금액</th>
+            <th>결제 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td><input type="checkbox" name="orderUid" value="[[${order.orderUid}]]"></td>
+            <td th:text="${order.orderUid}"></td>
+            <td th:text="${order.itemName}"></td>
+            <td th:text="${order.payment.price}"></td>
+            <td th:text="${order.payment.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" id="cancelButton">선택된 결제 취소</button>
+</form>
+
+<script>
+    // 결제 취소 요청
+    $("#cancelButton").click(function() {
+        // 선택된 주문 번호를 배열로 가져오기
+        var selectedOrders = [];
+        $("input[name='orderUid']:checked").each(function() {
+            selectedOrders.push($(this).val());
+        });
+
+        if (selectedOrders.length === 0) {
+            alert("취소할 결제를 선택해 주세요.");
+            return;
+        }
+
+       =
+        $.ajax({
+            url: '/payment/cancel',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(selectedOrders),
+            success: function(response) {
+                alert(response); =
+                location.reload(); // 페이지 새로고침
+            },
+            error: function(xhr, status, error) {
+                alert("결제 취소에 실패했습니다.");
+            }
+        });
+    });
+</script>
+</body>
+</html>

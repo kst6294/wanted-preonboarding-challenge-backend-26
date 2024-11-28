@@ -20,7 +20,7 @@ public class MemberServiceImpl implements MemberService {
     public Member autoRegister() {
         Member member = Member.builder()
                 .username(UUID.randomUUID().toString())
-                .email("portone@payment.com")
+                .email("example@example.com")
                 .build();
 
         return memberRepository.save(member);
