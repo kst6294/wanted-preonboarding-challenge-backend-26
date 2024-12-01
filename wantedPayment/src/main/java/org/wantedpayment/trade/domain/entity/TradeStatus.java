@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum TradeStatus {
-    ACCEPTED("판매승인"),
     REQUESTED("구매요청"),
-    CONFIRMED("구매확정");
+    ACCEPTED("판매승인"),
+    CONFIRMED("구매확정"),
+    CANCELED("결제취소");
 
     private final String status;
 
