@@ -6,6 +6,9 @@ import org.wantedpayment.global.util.BaseEntity;
 import org.wantedpayment.item.domain.entity.Item;
 import org.wantedpayment.member.domain.entity.Member;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -15,9 +18,11 @@ public class Trade extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int tradePrice;
+    private BigDecimal tradePrice;
     @Enumerated(EnumType.STRING)
     private TradeStatus tradeStatus;
+    private LocalDateTime paymentDateTime;
+    private String orderNumber;
 
     @Setter
     @ManyToOne
@@ -40,5 +45,9 @@ public class Trade extends BaseEntity {
 
     public void confirmPurchase() {
         this.tradeStatus = TradeStatus.CONFIRMED;
+    }
+
+    public void cancelPurchase() {
+        this.tradeStatus = TradeStatus.CANCELED;
     }
 }
