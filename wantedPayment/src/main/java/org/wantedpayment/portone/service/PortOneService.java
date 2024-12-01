@@ -151,13 +151,16 @@ public class PortOneService {
             throw new RuntimeException("Trade Price Not Matched");
         }
 
-        if (!response.getResponse().getStatus().equals("paid")) {
+        if (response.getResponse().getStatus().equals("paid")) {
+            log.info("Webhook: Purchase Completed!");
+            return "Completed";
+        } else if (response.getResponse().getStatus().equals("ready")) {
+            log.info("Webhook: Virtual Bank Account Is Ready");
+            return "VBank Ready";
+        } else {
             log.info("Webhook: Purchase Not Completed");
+            return "Not Completed";
         }
-
-        log.info("Webhook: Purchase Completed!");
-
-        return "Success";
     }
 
     public VBankResponse vBankPurchase(VBankRequest request, Long memberId) throws IamportResponseException, IOException {
