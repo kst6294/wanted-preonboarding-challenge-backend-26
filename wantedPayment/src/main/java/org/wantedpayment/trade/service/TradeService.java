@@ -63,6 +63,12 @@ public class TradeService {
                 .seller(seller)
                 .build();
 
+        item.decreaseQuantity();
+
+        if(item.getQuantity() == 0) {
+            item.changeStatus(ItemStatus.RESERVED);
+        }
+
         tradeRepository.save(trade);
 
         return new PreparationResponse(trade.getOrderNumber());
@@ -121,11 +127,6 @@ public class TradeService {
         }
 
         trade.acceptTrade();
-        item.decreaseQuantity();
-
-        if(item.getQuantity() == 0) {
-            item.changeStatus(ItemStatus.RESERVED);
-        }
     }
 
     @Transactional
