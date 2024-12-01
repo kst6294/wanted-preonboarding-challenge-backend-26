@@ -21,6 +21,9 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://jitpack.io"
+	}
 }
 
 dependencies {
@@ -32,6 +35,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// https://github.com/iamport/iamport-rest-client-java
+	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
+
 }
 
 tasks.named('test') {
