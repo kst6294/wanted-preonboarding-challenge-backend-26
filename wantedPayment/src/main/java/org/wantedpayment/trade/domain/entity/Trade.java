@@ -50,4 +50,8 @@ public class Trade extends BaseEntity {
     public void cancelPurchase() {
         this.tradeStatus = TradeStatus.CANCELED;
     }
+
+    public void refusePurchase() {
+        this.tradeStatus = TradeStatus.REFUSED;
+    }
 }

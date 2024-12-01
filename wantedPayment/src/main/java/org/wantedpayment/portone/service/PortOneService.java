@@ -18,11 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.wantedpayment.member.repository.MemberRepository;
-import org.wantedpayment.portone.model.dto.request.CancelPurchaseRequest;
+import org.wantedpayment.trade.domain.dto.request.CancelPurchaseRequest;
 import org.wantedpayment.item.domain.entity.Item;
 import org.wantedpayment.portone.model.dto.request.VBankRequest;
 import org.wantedpayment.portone.model.dto.request.WebhookRequest;
 import org.wantedpayment.portone.model.dto.response.VBankResponse;
+import org.wantedpayment.trade.domain.dto.request.RefuseTradeRequest;
 import org.wantedpayment.trade.domain.entity.Trade;
 import org.wantedpayment.trade.repository.TradeRepository;
 
@@ -98,11 +99,11 @@ public class PortOneService {
             CancelData data = cancelData(new CancelPurchaseRequest(
                     trade.getId(),
                     impUid,
-                    BigDecimal.valueOf(0),
-                    "주문 금액과 결제 금액이 일치하지 않습니다",
-                    "환불 예금주",
-                    "환불 계좌",
-                    "환불 은행"
+                    BigDecimal.valueOf(0)
+//                    "주문 금액과 결제 금액이 일치하지 않습니다",
+//                    "환불 예금주",
+//                    "환불 계좌",
+//                    "환불 은행"
             ));
 
             iamportClient.cancelPaymentByImpUid(data);
@@ -134,11 +135,11 @@ public class PortOneService {
             CancelData data = cancelData(new CancelPurchaseRequest(
                     trade.getId(),
                     request.getImpUid(),
-                    BigDecimal.valueOf(0),
-                    "주문 금액과 결제 금액이 일치하지 않습니다",
-                    "환불 예금주",
-                    "환불 계좌",
-                    "환불 은행"
+                    BigDecimal.valueOf(0)
+//                    "주문 금액과 결제 금액이 일치하지 않습니다",
+//                    "환불 예금주",
+//                    "환불 계좌",
+//                    "환불 은행"
             ));
 
             iamportClient.cancelPaymentByImpUid(data);
@@ -186,6 +187,7 @@ public class PortOneService {
         );
     }
 
+    // 구매자의 결제 취소
     public void cancelPurchase(CancelPurchaseRequest request) {
         log.info("Cancel Purchase..");
 
@@ -199,7 +201,24 @@ public class PortOneService {
             throw new RuntimeException("Cancel Purchase Failed: " + e.getMessage());
         }
 
-        log.info("Cancel Completed!");
+        log.info("Cancel Purchase Completed!");
+    }
+
+    // 판매자의 결제 취소
+    public void refusePurchase(RefuseTradeRequest request) {
+        log.info("Reject Purchase..");
+
+        CancelData data = cancelData(request);
+
+        //결제 취소
+        try {
+            IamportResponse<Payment> response = iamportClient.cancelPaymentByImpUid(data);
+            log.info(response.getMessage());
+        } catch (IamportResponseException | IOException e) {
+            throw new RuntimeException("Cancel Purchase Failed: " + e.getMessage());
+        }
+
+        log.info("Refuse Purchase Completed!");
     }
 
     private CancelData cancelData(CancelPurchaseRequest request) {
@@ -212,11 +231,25 @@ public class PortOneService {
             //부분 환불
             data = new CancelData(request.getImpUid(), true, request.getAmount());
         }
+//
+//        data.setReason(request.getReason());
+//        data.setRefund_bank(request.getRefundBank());
+//        data.setRefund_account(request.getRefundAccount());
+//        data.setRefund_holder(request.getRefundHolder());
 
-        data.setReason(request.getReason());
-        data.setRefund_bank(request.getRefundBank());
-        data.setRefund_account(request.getRefundAccount());
-        data.setRefund_holder(request.getRefundHolder());
+        return data;
+    }
+
+    private CancelData cancelData(RefuseTradeRequest request) {
+        CancelData data;
+
+        if (request.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+            //전액 환불
+            data = new CancelData(request.getImpUid(), true);
+        } else {
+            //부분 환불
+            data = new CancelData(request.getImpUid(), true, request.getAmount());
+        }
 
         return data;
     }

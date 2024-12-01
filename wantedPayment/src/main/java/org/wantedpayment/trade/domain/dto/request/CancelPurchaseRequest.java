@@ -1,4 +1,4 @@
-package org.wantedpayment.portone.model.dto.request;
+package org.wantedpayment.trade.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +13,8 @@ public class CancelPurchaseRequest {
     private Long tradeId;
     private String impUid;
     private BigDecimal amount;
-    private String reason;
-    private String refundHolder;
-    private String refundAccount;
-    private String refundBank;
+//    private String reason;
+//    private String refundHolder;
+//    private String refundAccount;
+//    private String refundBank;
 }

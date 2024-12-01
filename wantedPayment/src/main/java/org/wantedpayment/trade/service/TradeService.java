@@ -8,17 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.wantedpayment.portone.service.PortOneService;
-import org.wantedpayment.portone.model.dto.request.CancelPurchaseRequest;
+import org.wantedpayment.trade.domain.dto.request.*;
 import org.wantedpayment.portone.model.dto.response.PreparationResponse;
 import org.wantedpayment.item.domain.entity.Item;
 import org.wantedpayment.item.domain.entity.ItemStatus;
 import org.wantedpayment.item.repository.ItemRepository;
 import org.wantedpayment.member.domain.entity.Member;
 import org.wantedpayment.member.repository.MemberRepository;
-import org.wantedpayment.trade.domain.dto.request.CheckPurchaseRequest;
-import org.wantedpayment.trade.domain.dto.request.TradeAcceptRequest;
-import org.wantedpayment.trade.domain.dto.request.TradeConfirmRequest;
-import org.wantedpayment.trade.domain.dto.request.TradeCreateRequest;
 import org.wantedpayment.trade.domain.dto.response.BuyHistoryResponse;
 import org.wantedpayment.trade.domain.dto.response.SellHistoryResponse;
 import org.wantedpayment.trade.domain.entity.Trade;
@@ -73,8 +69,8 @@ public class TradeService {
     }
 
     @Transactional
-    public void cancelTrade(CancelPurchaseRequest request, Long userId){
-        Member member = memberRepository.findById(userId)
+    public void cancelTrade(CancelPurchaseRequest request, Long memberId){
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         Trade trade = tradeRepository.findById(request.getTradeId())
@@ -90,6 +86,26 @@ public class TradeService {
 
         portOneService.cancelPurchase(request);
         trade.cancelPurchase();
+    }
+
+    @Transactional
+    public void refuseTrade(RefuseTradeRequest request, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        Trade trade = tradeRepository.findById(request.getTradeId())
+                .orElseThrow(() -> new RuntimeException("Trade not found"));
+
+        if (!trade.getSeller().getId().equals(member.getId())) {
+            throw new RuntimeException("Login member does not match");
+        }
+
+        if(trade.getTradeStatus() != TradeStatus.REQUESTED) {
+            throw new RuntimeException("Trade Cannot be Rejected");
+        }
+
+        portOneService.refusePurchase(request);
+        trade.refusePurchase();
     }
 
     @Transactional
