@@ -3,7 +3,7 @@ spring:
     name: payment
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:://localhost:3306/payment
+    url: jdbc:mysql://localhost:3306/payment
     username: root
     password: 0818
   thymeleaf:
@@ -11,7 +11,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
@@ -19,3 +19,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
+port-one:
+  api:
+    key: test
+    secret: test
