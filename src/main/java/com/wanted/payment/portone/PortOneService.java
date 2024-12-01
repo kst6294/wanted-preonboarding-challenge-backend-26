@@ -7,15 +7,21 @@ import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import com.wanted.payment.dto.PaymentCheckDto;
+import com.wanted.payment.dto.VirtualAccountInfoDto;
 import com.wanted.payment.service.PaymentGatewayService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
@@ -33,18 +39,6 @@ public class PortOneService implements PaymentGatewayService {
         iamportClient = new IamportClient(IMP_KEY, IMP_SECRET);
     }
 
-    @Override
-    public void paymentCancel() {
-        String impId = "";
-        // 부분결제 여부
-//        iamportClient.cancelPaymentByImpUid(new CancelData(impId, true, new BigDecimal(1)));
-        //imp_uid?: string포트원 거래고유번호
-        //(Optional)
-        //merchant_uid?: string고객사 주문번호
-        //(Optional)
-        //amount?: number(부분)취소 요청금액
-    }
-
     @Transactional
     public boolean paymentCheck(PaymentCheckDto dto) {
         IamportResponse<Payment> iamportResponse = null;
@@ -57,13 +51,44 @@ public class PortOneService implements PaymentGatewayService {
         return iamportResponse != null && iamportResponse.getResponse().getStatus().equals("paid");
     }
 
-    public void 가상계좌(int orderId) {
+    @Override
+    public VirtualAccountInfoDto createVirtualAccount() {
 
-        IamportClient client;
+        RestClient restClient = RestClient.create();
+        CreateVirtualAccountRq rq = new CreateVirtualAccountRq();
+
+        ResponseEntity<CreateVirtualAccountRs> result = restClient.post()
+                .uri(BASE_URL + "vbanks")
+                .contentType(APPLICATION_JSON)
+                .body(rq)
+                .retrieve()
+//                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+//            throw new MyCustomRuntimeException(response.getStatusCode(), response.getHeaders())
+//        })
+                .toEntity(CreateVirtualAccountRs.class);
+
         // 가상계좌 발급 api
         // pg_api_key값 필요
         // merchant_uid: string고객사 주문번호 (이건 랜덤으로 가져오기 - orderId를 기준으로.)
         //amount: number입금 예정 금액  (이것도.)
         // pg?: stringPG사 구분코드
+
+        return new VirtualAccountInfoDto();
+
+    }
+
+    @Override
+    public void paymentCancel() {
+        String impId="";
+        try {
+            iamportClient.cancelPaymentByImpUid(new CancelData(impId, true, new BigDecimal(1)));
+        } catch (IamportResponseException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        //imp_uid?: string포트원 거래고유번호
+        //(Optional)
+        //merchant_uid?: string고객사 주문번호
+        //(Optional)
+        //amount?: number(부분)취소 요청금액
     }
 }

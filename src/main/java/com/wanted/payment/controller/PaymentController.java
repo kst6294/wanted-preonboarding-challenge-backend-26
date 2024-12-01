@@ -21,6 +21,7 @@ public class PaymentController {
 
     @PostMapping("/virtual")
     public void virtualPayment() {
+
     }
 
     @DeleteMapping
