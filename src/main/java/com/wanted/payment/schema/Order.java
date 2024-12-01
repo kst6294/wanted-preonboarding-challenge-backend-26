@@ -23,9 +23,14 @@ public class Order {
     @Column()
     private int finalPrice;
 
+    @Column()
+    private String paymentId;
+
     // ...
 
     public void statusChange(OrderStatus status) {
         this.status = status;
     }
+
+    public void savePaymentId(String paymentId) {}
 }

@@ -19,6 +19,7 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
+    @Transactional()
     public void payment(PaymentCompleteDto dto) {
         boolean completed = pgService.paymentCheck(PaymentCheckDto.of(dto.getPaymentId()));
 
@@ -26,6 +27,7 @@ public class PaymentService {
 
         if(completed) {
             order.statusChange(OrderStatus.PAYMENT_COMPLETE);
+            order.savePaymentId(dto.getPaymentId());
         }
 
         throw new RuntimeException("결제가 진행되지 않은 상품입니다. 다시 결제가 필요합니다.");
