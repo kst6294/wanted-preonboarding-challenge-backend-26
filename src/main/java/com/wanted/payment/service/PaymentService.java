@@ -1,9 +1,6 @@
 package com.wanted.payment.service;
 
-import com.wanted.payment.dto.PaymentCheckDto;
-import com.wanted.payment.dto.PaymentCompleteDto;
-import com.wanted.payment.dto.VirtualAccountCreateDto;
-import com.wanted.payment.dto.VirtualAccountInfoDto;
+import com.wanted.payment.dto.*;
 import com.wanted.payment.repository.OrderRepository;
 import com.wanted.payment.repository.ProductRepository;
 import com.wanted.payment.rqrs.CreateVirtualBankRs;
@@ -11,6 +8,7 @@ import com.wanted.payment.schema.Order;
 import com.wanted.payment.schema.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class PaymentService {
         return new CreateVirtualBankRs(dto.getPaymentId(), dto.getBankName(), dto.getBankNum(), dto.getBankDate());
     }
 
-    public void paymentCancel() {
+    public void paymentCancel(PaymentCancelDto dto) {
         // 취소할 주문
         // 취소할 상품 목록
 

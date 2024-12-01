@@ -1,30 +1,31 @@
 package com.wanted.payment.controller;
 
+import com.wanted.payment.dto.PaymentCancelDto;
 import com.wanted.payment.dto.PaymentCompleteDto;
 import com.wanted.payment.rqrs.CreateVirtualBankRs;
+import com.wanted.payment.rqrs.PaymentCancelRq;
 import com.wanted.payment.rqrs.PaymentRq;
 import com.wanted.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RestController("/payment")
+@RestController("/order")
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @PostMapping("{orderId}")
-    public void payment(@PathVariable int orderId, @RequestBody PaymentRq request) {
-        paymentService.payment(new PaymentCompleteDto(request.getPaymentId(), orderId));
+    @PostMapping("/{orderId}/payment/{paymentId}")
+    public void payment(@PathVariable int orderId, @PathVariable String paymentId) {
+        paymentService.payment(new PaymentCompleteDto(paymentId, orderId));
     }
 
-    @PostMapping("/virtual/{orderId}")
+    @PostMapping("/{orderId}/payment/virtual")
     public CreateVirtualBankRs virtualPayment(@PathVariable int orderId) {
         return paymentService.createVirtualBank(orderId);
     }
 
-    @DeleteMapping
-    public void cancel() {
-        // request order id (주문 번호)
-        // 결제 정보 조회 및 대행 서비스에 요청 보내기
+    @DeleteMapping("/{orderId}/payment/{paymentId}")
+    public void cancel(@PathVariable int orderId, @PathVariable String paymentId, @RequestBody PaymentCancelRq rq) {
+        paymentService.paymentCancel(PaymentCancelDto.of(paymentId, orderId, rq));
     }
 }
