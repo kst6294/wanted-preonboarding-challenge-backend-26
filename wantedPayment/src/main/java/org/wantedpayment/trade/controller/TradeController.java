@@ -1,18 +1,24 @@
 package org.wantedpayment.trade.controller;
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.wantedpayment.portone.model.dto.request.CancelPurchaseRequest;
+import org.wantedpayment.portone.model.dto.response.PreparationResponse;
 import org.wantedpayment.global.util.CommonController;
+import org.wantedpayment.trade.domain.dto.request.CheckPurchaseRequest;
 import org.wantedpayment.trade.domain.dto.request.TradeAcceptRequest;
 import org.wantedpayment.trade.domain.dto.request.TradeConfirmRequest;
 import org.wantedpayment.trade.domain.dto.request.TradeCreateRequest;
 import org.wantedpayment.trade.domain.dto.response.BuyHistoryResponse;
 import org.wantedpayment.trade.domain.dto.response.SellHistoryResponse;
 import org.wantedpayment.trade.service.TradeService;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/trade")
@@ -21,8 +27,20 @@ public class TradeController extends CommonController {
     private final TradeService tradeService;
 
     @PostMapping
-    public void buyItem(@RequestBody TradeCreateRequest request, HttpServletRequest httpServletRequest) {
-        tradeService.buyItem(request, getLoginMemberId(httpServletRequest));
+    public ResponseEntity<PreparationResponse> buyItem(@RequestBody TradeCreateRequest request,
+                                                       HttpServletRequest httpServletRequest)
+            throws IamportResponseException, IOException {
+        return ResponseEntity.ok(
+                tradeService.buyItem(
+                        request,
+                        getLoginMemberId(httpServletRequest)
+                )
+        );
+    }
+
+    @PatchMapping("/cancel")
+    public void cancelTrade(@RequestBody CancelPurchaseRequest request, HttpServletRequest httpServletRequest){
+        tradeService.cancelTrade(request, getLoginMemberId(httpServletRequest));
     }
 
     @PostMapping("/accept")
