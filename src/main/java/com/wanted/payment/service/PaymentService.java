@@ -6,6 +6,7 @@ import com.wanted.payment.repository.ProductRepository;
 import com.wanted.payment.rqrs.CreateVirtualBankRs;
 import com.wanted.payment.schema.Order;
 import com.wanted.payment.schema.OrderStatus;
+import com.wanted.payment.schema.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ public class PaymentService {
 
     @Transactional()
     public void payment(PaymentCompleteDto dto) {
-        boolean completed = pgService.paymentCheck(PaymentCheckDto.of(dto.getPaymentId()));
+        boolean completed = pgService.paymentCheck(PgPaymentCheckDto.of(dto.getPaymentId()));
 
         Order order = orderRepository.findById(dto.getOrderId()).orElseThrow();
 
@@ -33,16 +34,19 @@ public class PaymentService {
 
     public CreateVirtualBankRs createVirtualBank(int orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        VirtualAccountInfoDto dto = pgService.createVirtualAccount(new VirtualAccountCreateDto(orderId, order.getFinalPrice()));
+        VirtualAccountInfoDto dto = pgService.createVirtualAccount(new PgVirtualAccountCreateDto(orderId, order.getFinalPrice()));
 
         return new CreateVirtualBankRs(dto.getPaymentId(), dto.getBankName(), dto.getBankNum(), dto.getBankDate());
     }
 
     public void paymentCancel(PaymentCancelDto dto) {
-        // 취소할 주문
-        // 취소할 상품 목록
+        PgPaymentCancelDto pgDto = PgPaymentCancelDto.of(dto.getPaymentId(), dto.isAll());
 
-        // 포트원 거래 고유 번호,
+        if(!dto.isAll()) {
+            int price = productRepository.findAllById(dto.getProductIds()).stream().mapToInt(Product::getPrice).sum(); // product id에 해당하는 price 가져오기.
+            pgDto.savePrice(price);
+        }
 
+        pgService.paymentCancel(pgDto);
     }
 }

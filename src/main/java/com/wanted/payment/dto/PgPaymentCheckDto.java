@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor(staticName = "of")
 @Getter
-public class PaymentCheckDto {
+public class PgPaymentCheckDto {
     private String paymentId;
 }

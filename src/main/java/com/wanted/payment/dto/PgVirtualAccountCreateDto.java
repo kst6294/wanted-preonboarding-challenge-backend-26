@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class VirtualAccountCreateDto {
+public class PgVirtualAccountCreateDto {
     private int orderId;
     private int price;
 }

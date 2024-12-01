@@ -6,15 +6,15 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
-import com.wanted.payment.dto.PaymentCheckDto;
-import com.wanted.payment.dto.VirtualAccountCreateDto;
+import com.wanted.payment.dto.PgPaymentCancelDto;
+import com.wanted.payment.dto.PgPaymentCheckDto;
+import com.wanted.payment.dto.PgVirtualAccountCreateDto;
 import com.wanted.payment.dto.VirtualAccountInfoDto;
 import com.wanted.payment.service.PaymentGatewayService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -41,19 +41,19 @@ public class PortOneService implements PaymentGatewayService {
     }
 
     @Transactional
-    public boolean paymentCheck(PaymentCheckDto dto) {
+    public boolean paymentCheck(PgPaymentCheckDto dto) {
         IamportResponse<Payment> iamportResponse = null;
         try {
             iamportResponse = iamportClient.paymentByImpUid(dto.getPaymentId());
         } catch (IamportResponseException | IOException e) {
-            throw new RuntimeException("portOne 결제 확인 중 에러가 발생하였습니다. " + e.getMessage());
+            throw new RuntimeException("portOne 결제 확인 중 에러가 발생하였습니다. " + e);
         }
 
         return iamportResponse != null && iamportResponse.getResponse().getStatus().equals("paid");
     }
 
     @Override
-    public VirtualAccountInfoDto createVirtualAccount(VirtualAccountCreateDto dto) {
+    public VirtualAccountInfoDto createVirtualAccount(PgVirtualAccountCreateDto dto) {
         RestClient restClient = RestClient.builder().baseUrl(BASE_URL+"/vbanks").build();
         CreateVirtualAccountRq rq = new CreateVirtualAccountRq(Integer.toString(dto.getOrderId()), dto.getPrice(), PGBankCode.KB.getCode(), 30);
 
@@ -78,17 +78,15 @@ public class PortOneService implements PaymentGatewayService {
     }
 
     @Override
-    public void paymentCancel() {
-        String impId="";
+    public void paymentCancel(PgPaymentCancelDto dto) {
         try {
-            iamportClient.cancelPaymentByImpUid(new CancelData(impId, true, new BigDecimal(1)));
+            if(dto.isAll()) {
+                iamportClient.cancelPaymentByImpUid(new CancelData(dto.getPaymentId(), true));
+            } else {
+                iamportClient.cancelPaymentByImpUid(new CancelData(dto.getPaymentId(), true, new BigDecimal(dto.getPrice())));
+            }
         } catch (IamportResponseException | IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("결제 취소 중 에러가 발생했습니다." + e);
         }
-        //imp_uid?: string포트원 거래고유번호
-        //(Optional)
-        //merchant_uid?: string고객사 주문번호
-        //(Optional)
-        //amount?: number(부분)취소 요청금액
     }
 }
