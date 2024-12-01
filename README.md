@@ -30,6 +30,7 @@ order이나 product에 대한 구현은 하지 않았다.
 고도화 방안
 - exception 커스터마이징
 - order, product, real_product(...) 구현
+- 다른 도메인 구현 후 프로젝트 구조 변경
 
 ### 어려웠던 부분
 결제 도메인에 대한 지식이 부족하여 어려움이 있었다.
