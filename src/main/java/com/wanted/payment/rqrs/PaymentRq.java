@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PaymentRequest {
+public class PaymentRq {
     private String paymentId;
-    private int orderId;
 }

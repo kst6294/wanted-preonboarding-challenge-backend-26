@@ -7,6 +7,7 @@ import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import com.wanted.payment.dto.PaymentCheckDto;
+import com.wanted.payment.dto.VirtualAccountCreateDto;
 import com.wanted.payment.dto.VirtualAccountInfoDto;
 import com.wanted.payment.service.PaymentGatewayService;
 import jakarta.annotation.PostConstruct;
@@ -31,6 +32,8 @@ public class PortOneService implements PaymentGatewayService {
 
     @Value("${port-one.imp.key}")
     private String IMP_KEY;
+    @Value("${port-one.api.key}")
+    private String API_KEY;
     @Value("${port-one.imp.secret}")
     private String IMP_SECRET;
 
@@ -52,29 +55,28 @@ public class PortOneService implements PaymentGatewayService {
     }
 
     @Override
-    public VirtualAccountInfoDto createVirtualAccount() {
+    public VirtualAccountInfoDto createVirtualAccount(VirtualAccountCreateDto dto) {
+        RestClient restClient = RestClient.builder().baseUrl(BASE_URL+"/vbanks").build();
+        CreateVirtualAccountRq rq = new CreateVirtualAccountRq(Integer.toString(dto.getOrderId()), dto.getPrice(), PGBankCode.KB.getCode(), 30);
 
-        RestClient restClient = RestClient.create();
-        CreateVirtualAccountRq rq = new CreateVirtualAccountRq();
-
-        ResponseEntity<CreateVirtualAccountRs> result = restClient.post()
-                .uri(BASE_URL + "vbanks")
+        ResponseEntity<CreateVirtualAccountRs> rsEntity = restClient.post()
+                .uri(builder -> builder.queryParam("pg_api_key", API_KEY).build())
                 .contentType(APPLICATION_JSON)
                 .body(rq)
                 .retrieve()
-//                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
-//            throw new MyCustomRuntimeException(response.getStatusCode(), response.getHeaders())
-//        })
                 .toEntity(CreateVirtualAccountRs.class);
 
-        // 가상계좌 발급 api
-        // pg_api_key값 필요
-        // merchant_uid: string고객사 주문번호 (이건 랜덤으로 가져오기 - orderId를 기준으로.)
-        //amount: number입금 예정 금액  (이것도.)
-        // pg?: stringPG사 구분코드
+        if(!rsEntity.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("가상계좌 생성 중 오류 발생했습니다.");
+        }
 
-        return new VirtualAccountInfoDto();
+        CreateVirtualAccountRs rs = rsEntity.getBody();
 
+        if(rs == null) {
+            throw new RuntimeException("가상계좌가 정상적으로 생성되지 않았습니다.");
+        }
+
+        return new VirtualAccountInfoDto(rs.getImp_uid(), rs.getVbank_name(), rs.getVbank_num(), rs.getVbank_date());
     }
 
     @Override

@@ -1,27 +1,25 @@
 package com.wanted.payment.controller;
 
 import com.wanted.payment.dto.PaymentCompleteDto;
-import com.wanted.payment.rqrs.PaymentRequest;
+import com.wanted.payment.rqrs.CreateVirtualBankRs;
+import com.wanted.payment.rqrs.PaymentRq;
 import com.wanted.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController("/payment")
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @PostMapping()
-    public void payment(@RequestBody PaymentRequest request) {
-        paymentService.payment(new PaymentCompleteDto(request.getPaymentId(), request.getOrderId()));
+    @PostMapping("{orderId}")
+    public void payment(@PathVariable int orderId, @RequestBody PaymentRq request) {
+        paymentService.payment(new PaymentCompleteDto(request.getPaymentId(), orderId));
     }
 
-    @PostMapping("/virtual")
-    public void virtualPayment() {
-
+    @PostMapping("/virtual/{orderId}")
+    public CreateVirtualBankRs virtualPayment(@PathVariable int orderId) {
+        return paymentService.createVirtualBank(orderId);
     }
 
     @DeleteMapping

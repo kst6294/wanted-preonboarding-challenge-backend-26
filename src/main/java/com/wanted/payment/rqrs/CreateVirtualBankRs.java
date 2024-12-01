@@ -1,12 +1,9 @@
-package com.wanted.payment.dto;
+package com.wanted.payment.rqrs;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@Getter
-public class VirtualAccountInfoDto {
+public class CreateVirtualBankRs {
     private String paymentId;
     private String bankName; // 은행명
     private String bankNum; // 계좌번호
