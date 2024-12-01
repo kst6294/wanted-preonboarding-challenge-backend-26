@@ -10,4 +10,6 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     List<Trade> findByBuyerId(Long buyerId);
 
     List<Trade> findBySellerId(Long sellerId);
+
+    Optional<Trade> findByMerchantUid(String merchantUid);
 }

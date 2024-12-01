@@ -6,7 +6,8 @@ public enum TradeStatus {
 
     BUY("구매요청"),
     SELL("판매승인"),
-    END("구매확정");
+    END("구매확정"),
+    REFUSED("취소");
 
     private final String status;
 

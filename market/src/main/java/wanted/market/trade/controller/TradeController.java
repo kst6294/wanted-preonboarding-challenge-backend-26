@@ -1,10 +1,12 @@
 package wanted.market.trade.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wanted.market.global.util.BaseController;
+import wanted.market.trade.domain.dto.request.AcceptRequest;
 import wanted.market.trade.domain.dto.response.TradeBuyResponseDto;
 import wanted.market.trade.domain.dto.response.TradeMyBuyListDto;
 import wanted.market.trade.domain.dto.response.TradeMySellListDto;
@@ -14,6 +16,7 @@ import java.util.List;
 
 import static wanted.market.global.util.BaseController.*;
 
+@Tag(name = "거래 기능", description = "구매요청, 구매승인, 구매확정 3단계")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/trade")
@@ -35,8 +38,8 @@ public class TradeController {
     }
 
     @PostMapping("/accept/{tradeId}")
-    public ResponseEntity<TradeBuyResponseDto> buyAccept(@RequestParam("tradeId") Long tradeId, HttpServletRequest request) {
-        return ResponseEntity.ok(tradeService.buyAccept(tradeId, getMemberIdFromSession(request)));
+    public ResponseEntity<TradeBuyResponseDto> buyAccept(@RequestParam("tradeId") Long tradeId, @RequestBody AcceptRequest acceptRequest, HttpServletRequest request) {
+        return ResponseEntity.ok(tradeService.buyAccept(tradeId, acceptRequest.getAcceptStatus(), getMemberIdFromSession(request)));
     }
 
     @PostMapping("/confirm/{tradeId}")

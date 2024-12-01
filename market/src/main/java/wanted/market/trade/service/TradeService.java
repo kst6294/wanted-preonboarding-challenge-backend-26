@@ -1,6 +1,7 @@
 package wanted.market.trade.service;
 
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,15 +11,22 @@ import wanted.market.item.domain.entity.Item;
 import wanted.market.item.domain.entity.ItemStatus;
 import wanted.market.item.repository.ItemRepository;
 import wanted.market.member.repository.MemberRepository;
+import wanted.market.portone.service.PortoneService;
 import wanted.market.trade.domain.dto.request.TradeRequestDto;
 import wanted.market.trade.domain.dto.response.TradeBuyResponseDto;
 import wanted.market.trade.domain.dto.response.TradeMyBuyListDto;
 import wanted.market.trade.domain.dto.response.TradeMySellListDto;
+import wanted.market.trade.domain.entity.AcceptStatus;
 import wanted.market.trade.domain.entity.Trade;
 import wanted.market.trade.domain.entity.TradeStatus;
 import wanted.market.trade.repository.TradeRepository;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
+
+import static wanted.market.portone.service.PortoneService.*;
+import static wanted.market.trade.domain.entity.AcceptStatus.*;
 
 @Slf4j
 @Service
@@ -27,6 +35,7 @@ public class TradeService {
     private final TradeRepository tradeRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final PortoneService portoneService;
 
 
     /**
@@ -45,6 +54,8 @@ public class TradeService {
             throw new RuntimeException("판매중이 아니라서 구매 요청 불가");
         }
 
+
+
         Trade trade = Trade.builder()
                 .status(TradeStatus.BUY)
                 .price(item.getPrice())
@@ -55,7 +66,19 @@ public class TradeService {
                         .orElseThrow(() -> new RuntimeException("구매자 정보를 찾을 수 없음")))
                 .build();
 
+
+
         Trade savedTrade = tradeRepository.save(trade);
+
+        try {
+            String merchantUid = portoneService.prePurchase(BigDecimal.valueOf(savedTrade.getPrice()));
+            savedTrade.setMerchantUid(merchantUid);
+        } catch (IamportResponseException e) {
+            throw new RuntimeException("IamPort 연결 실패");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
         return new TradeBuyResponseDto(savedTrade.getId(), savedTrade.getItem().getId(), savedTrade.getStatus());
     }
@@ -64,13 +87,19 @@ public class TradeService {
      * 판매승인
      */
     @Transactional
-    public TradeBuyResponseDto buyAccept(Long tradeId, Long sellerId) {
+    public TradeBuyResponseDto buyAccept(Long tradeId, AcceptStatus acceptStatus, Long sellerId) {
         Trade trade = tradeRepository.findById(tradeId).orElseThrow(()->new RuntimeException("거래를 찾을 수 없음"));
         if (!trade.getSeller().getId().equals(sellerId)) {
             throw new RuntimeException("판매 등록자와 판매승인자가 다름");
         }
-        trade.setStatusSELL();
-        trade.getItem().itemQuantityDecrease();
+
+        if (acceptStatus.equals(ACCEPT)) {
+            trade.setStatusSELL();
+            trade.getItem().itemQuantityDecrease();
+        } else {
+            trade.setStatusCancel();
+            portoneService.refund(tradeId);
+        }
 
         return new TradeBuyResponseDto(trade.getId(), trade.getItem().getId(), trade.getStatus());
     }

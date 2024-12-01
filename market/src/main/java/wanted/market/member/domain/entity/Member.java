@@ -15,13 +15,13 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "login_id", nullable = false)
+    @Column(name = "login_id", unique = true, nullable = false)
     private String loginId;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "member_name")
+    @Column(name = "member_name", unique = true, nullable = false)
     private String memberName;
 
 }

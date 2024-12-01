@@ -1,6 +1,7 @@
 package wanted.market.item.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static wanted.market.global.util.BaseController.getMemberIdFromSession;
 
+@Tag(name = "상품 기능", description = "상품 등록, 상품 수정, 상품 삭제, 상품 목록, 상품 상세")
 @RestController
 @RequestMapping("/item")
 @RequiredArgsConstructor

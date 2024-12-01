@@ -51,6 +51,7 @@ public class SecurityConfig {
                     authorizeRequests.requestMatchers("/login/**").permitAll();
                     authorizeRequests.requestMatchers("/item/**").permitAll();
                     authorizeRequests.requestMatchers("/trade/**").permitAll();
+                    authorizeRequests.requestMatchers("/portone/**").permitAll();
                 })
                 .build();
     }

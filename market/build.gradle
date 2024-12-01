@@ -23,6 +23,13 @@ repositories {
 	mavenCentral()
 }
 
+allprojects {
+	repositories {
+		mavenCentral()
+		maven { url 'https://jitpack.io' }
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -44,6 +51,9 @@ dependencies {
 	
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// 포트원 REST API
+	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 }
 
 tasks.named('test') {

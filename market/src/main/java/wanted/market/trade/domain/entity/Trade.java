@@ -42,6 +42,10 @@ public class Trade {
     @JoinColumn(name = "seller_id", nullable = false)
     private Member seller;
 
+    @Column(name = "merchant_uid")
+    private String merchantUid;
+
+
     public void setStatusSELL() {
         if (status.equals(TradeStatus.BUY)) {
             this.status = TradeStatus.SELL;
@@ -58,4 +62,12 @@ public class Trade {
         }
     }
 
+    public void setStatusCancel() {
+        this.status = TradeStatus.REFUSED;
+    }
+
+    public Trade setMerchantUid(String merchantUid) {
+        this.merchantUid = merchantUid;
+        return this;
+    }
 }

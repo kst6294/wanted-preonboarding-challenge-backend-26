@@ -1,5 +1,6 @@
 package wanted.market.login.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import wanted.market.member.domain.entity.Member;
 
 import static wanted.market.login.session.SessionConst.LOGIN_MEMBER;
 
+@Tag(name = "로그인 기능", description = "로그인, 로그아웃")
 @Slf4j
 @RestController
 @RequestMapping("/login")

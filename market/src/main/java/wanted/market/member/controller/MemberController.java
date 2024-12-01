@@ -1,5 +1,6 @@
 package wanted.market.member.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import wanted.market.member.domain.entity.Member;
 import wanted.market.member.repository.MemberRepository;
 import wanted.market.member.service.MemberService;
 
+@Tag(name = "회원 기능", description = "회원 가입, 회원 탈퇴")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
