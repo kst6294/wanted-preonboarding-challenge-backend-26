@@ -74,6 +74,7 @@ public class ItemService {
                 new ItemPreviewResponse(
                         currItem.getId(),
                         currItem.getName(),
+                        currItem.getPrice(),
                         currItem.getQuantity(),
                         currItem.getStatus()
                 ));

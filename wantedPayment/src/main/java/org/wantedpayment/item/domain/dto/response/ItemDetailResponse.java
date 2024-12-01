@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.wantedpayment.item.domain.entity.ItemStatus;
 
+import java.math.BigDecimal;
+
 @Getter
 @AllArgsConstructor
 public class ItemDetailResponse {
@@ -11,7 +13,7 @@ public class ItemDetailResponse {
     private String sellerName;
     private String name;
     private String description;
-    private int price;
+    private BigDecimal price;
     private int quantity;
     private ItemStatus status;
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import org.wantedpayment.global.util.BaseEntity;
 import org.wantedpayment.member.domain.entity.Member;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Builder
@@ -16,7 +18,7 @@ public class Item extends BaseEntity {
     private Long id;
     private String name;
     private String description;
-    private int price;
+    private BigDecimal price;
     private int quantity;
     @Enumerated(EnumType.STRING)
     private ItemStatus status;
@@ -32,13 +34,17 @@ public class Item extends BaseEntity {
 
     public void increaseQuantity() {
         this.quantity++;
+
+        if(this.status != ItemStatus.ON_SALE) {
+            this.status = ItemStatus.ON_SALE;
+        }
     }
 
     public void changeStatus(ItemStatus newStatus) {
         this.status = newStatus;
     }
 
-    public void updateItem(String name, String description, int price, int quantity) {
+    public void updateItem(String name, String description, BigDecimal price, int quantity) {
         this.name = name;
         this.description = description;
         this.price = price;
