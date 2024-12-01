@@ -10,7 +10,9 @@ import java.util.Optional;
 
 public interface TradeRepository extends JpaRepository<Trade, Long> {
     List<Trade> findByItemId(Long id);
-    Optional<Trade> findByItemIdAndBuyerId(Long id, Long buyerId);
+    List<Trade> findByItemIdAndBuyerId(Long id, Long buyerId);
     Page<Trade> findByBuyerId(Pageable pageable, Long memberId);
     Page<Trade> findBySellerId(Pageable pageable, Long memberId);
+
+    Optional<Trade> findByOrderNumber(String orderNumber);
 }
