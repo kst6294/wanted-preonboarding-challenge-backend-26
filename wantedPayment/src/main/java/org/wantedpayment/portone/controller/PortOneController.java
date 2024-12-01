@@ -10,6 +10,7 @@ import org.wantedpayment.global.util.CommonController;
 import org.wantedpayment.portone.model.dto.request.VBankRequest;
 import org.wantedpayment.portone.model.dto.request.WebhookRequest;
 import org.wantedpayment.portone.model.dto.response.VBankResponse;
+import org.wantedpayment.portone.model.dto.response.WebhookResponse;
 import org.wantedpayment.portone.service.PortOneService;
 import org.wantedpayment.trade.domain.dto.request.CheckPurchaseRequest;
 
@@ -30,7 +31,7 @@ public class PortOneController extends CommonController {
     }
 
     @PostMapping("/webhook")
-    public ResponseEntity<String> receiveWebhook(@RequestBody WebhookRequest request)
+    public ResponseEntity<WebhookResponse> receiveWebhook(@RequestBody WebhookRequest request)
             throws IamportResponseException, IOException {
         log.info("Received Webhook Request");
 

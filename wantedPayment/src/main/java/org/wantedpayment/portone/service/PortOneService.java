@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.wantedpayment.member.repository.MemberRepository;
+import org.wantedpayment.portone.model.dto.response.WebhookResponse;
 import org.wantedpayment.trade.domain.dto.request.CancelPurchaseRequest;
 import org.wantedpayment.item.domain.entity.Item;
 import org.wantedpayment.portone.model.dto.request.VBankRequest;
@@ -122,7 +123,7 @@ public class PortOneService {
         log.info("Client: Purchase Completed!");
     }
 
-    public String checkPurchaseCompleteWithWebhook(WebhookRequest request)
+    public WebhookResponse checkPurchaseCompleteWithWebhook(WebhookRequest request)
             throws IamportResponseException, IOException {
         log.info("Checking Purchase With Webhook...");
 
@@ -153,13 +154,28 @@ public class PortOneService {
 
         if (response.getResponse().getStatus().equals("paid")) {
             log.info("Webhook: Purchase Completed!");
-            return "Completed";
+            return new WebhookResponse(
+                    request.getImpUid(),
+                    trade.getOrderNumber(),
+                    "Completed",
+                    request.getCancellationId()
+            );
         } else if (response.getResponse().getStatus().equals("ready")) {
             log.info("Webhook: Virtual Bank Account Is Ready");
-            return "VBank Ready";
+            return new WebhookResponse(
+                    request.getImpUid(),
+                    trade.getOrderNumber(),
+                    "VBank Ready",
+                    request.getCancellationId()
+            );
         } else {
             log.info("Webhook: Purchase Not Completed");
-            return "Not Completed";
+            return new WebhookResponse(
+                    request.getImpUid(),
+                    trade.getOrderNumber(),
+                    "Not Completed",
+                    request.getCancellationId()
+            );
         }
     }
 
