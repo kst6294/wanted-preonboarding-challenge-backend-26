@@ -43,7 +43,7 @@ public class PaymentService {
         PgPaymentCancelDto pgDto = PgPaymentCancelDto.of(dto.getPaymentId(), dto.isAll());
 
         if(!dto.isAll()) {
-            int price = productRepository.findAllById(dto.getProductIds()).stream().mapToInt(Product::getPrice).sum(); // product id에 해당하는 price 가져오기.
+            int price = productRepository.findByIdIn(dto.getProductIds()).stream().mapToInt(Product::getPrice).sum(); // product id에 해당하는 price 가져오기.
             pgDto.savePrice(price);
         }
 

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    List<Product> findAllById(List<Integer> ids);
+    List<Product> findByIdIn(List<Integer> ids);
 }

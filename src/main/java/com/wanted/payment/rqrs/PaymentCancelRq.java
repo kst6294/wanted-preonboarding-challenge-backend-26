@@ -9,5 +9,5 @@ import java.util.List;
 @AllArgsConstructor
 public class PaymentCancelRq {
     private boolean isAll;
-    private List<Integer> productIds;
+    private List<Integer> productIds; // 부분 환불 고려
 }
