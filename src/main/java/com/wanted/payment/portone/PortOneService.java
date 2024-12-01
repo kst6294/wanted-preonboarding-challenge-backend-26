@@ -30,16 +30,14 @@ public class PortOneService implements PaymentGatewayService {
     private static final String BASE_URL = "https://api.iamport.kr";
     private IamportClient iamportClient;
 
-    @Value("${port-one.imp.key}")
-    private String IMP_KEY;
     @Value("${port-one.api.key}")
     private String API_KEY;
-    @Value("${port-one.imp.secret}")
-    private String IMP_SECRET;
+    @Value("${port-one.api.secret}")
+    private String API_SECRET;
 
     @PostConstruct
     public void initializeClient() {
-        iamportClient = new IamportClient(IMP_KEY, IMP_SECRET);
+        iamportClient = new IamportClient(API_KEY, API_SECRET);
     }
 
     @Transactional
