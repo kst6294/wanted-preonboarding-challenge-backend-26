@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.CannotLoadBeanClassException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import wanted.market.portone.domain.WebHook;
 import wanted.market.trade.domain.dto.response.RefundMessageResponse;
 import wanted.market.trade.domain.entity.Trade;
@@ -92,7 +93,7 @@ public class PortoneService {
      * @return
      */
 
-
+    @Transactional
     public void validateWebHook(WebHook webHook) {
         IamportResponse<Payment> paymentIamportResponse;
 
@@ -105,6 +106,7 @@ public class PortoneService {
         }
 
         Trade findTrade = tradeRepository.findByMerchantUid(paymentIamportResponse.getResponse().getMerchantUid()).orElseThrow(() -> new RuntimeException("web hook 과 일치하는 거래 내역 없음."));
+        findTrade.setStatusPay();
         if (!BigDecimal.valueOf(findTrade.getPrice()).equals(paymentIamportResponse.getResponse().getAmount())) {
             try {
                 CancelData cancelData = new CancelData(findTrade.getMerchantUid(), false);
@@ -113,6 +115,8 @@ public class PortoneService {
                 throw new RuntimeException("port one 결제 취소 실패");
             } catch (IOException e) {
                 throw new RuntimeException("취소 하고자 하는 데이터 찾을 수 없음");
+            } finally {
+                findTrade.setStatusCancel();
             }
         }
 

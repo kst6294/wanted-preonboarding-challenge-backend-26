@@ -27,6 +27,7 @@ import java.util.List;
 
 import static wanted.market.portone.service.PortoneService.*;
 import static wanted.market.trade.domain.entity.AcceptStatus.*;
+import static wanted.market.trade.domain.entity.TradeStatus.*;
 
 @Slf4j
 @Service
@@ -53,11 +54,8 @@ public class TradeService {
         if (!item.getStatus().equals(ItemStatus.ONSALE)) {
             throw new RuntimeException("판매중이 아니라서 구매 요청 불가");
         }
-
-
-
         Trade trade = Trade.builder()
-                .status(TradeStatus.BUY)
+                .status(BUY)
                 .price(item.getPrice())
                 .item(item)
                 .seller(memberRepository.findById(item.getSeller().getId())
@@ -65,9 +63,6 @@ public class TradeService {
                 .buyer(memberRepository.findById(buyerId)
                         .orElseThrow(() -> new RuntimeException("구매자 정보를 찾을 수 없음")))
                 .build();
-
-
-
         Trade savedTrade = tradeRepository.save(trade);
 
         try {
@@ -100,7 +95,6 @@ public class TradeService {
             trade.setStatusCancel();
             portoneService.refund(tradeId);
         }
-
         return new TradeBuyResponseDto(trade.getId(), trade.getItem().getId(), trade.getStatus());
     }
 

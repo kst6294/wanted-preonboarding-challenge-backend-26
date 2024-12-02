@@ -47,7 +47,7 @@ public class Trade {
 
 
     public void setStatusSELL() {
-        if (status.equals(TradeStatus.BUY)) {
+        if (status.equals(TradeStatus.PAY)) {
             this.status = TradeStatus.SELL;
         } else {
             throw new RuntimeException("구매요청이 아닌 상태에서 판매승인 요청");
@@ -69,5 +69,13 @@ public class Trade {
     public Trade setMerchantUid(String merchantUid) {
         this.merchantUid = merchantUid;
         return this;
+    }
+
+    public void setStatusPay() {
+        if (status.equals(TradeStatus.BUY)) {
+            this.status = TradeStatus.PAY;
+        } else {
+            throw new RuntimeException("구매 요청이 아닌 상태에서 결제 진행");
+        }
     }
 }
