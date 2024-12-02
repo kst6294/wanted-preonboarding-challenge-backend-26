@@ -4,7 +4,7 @@
 
 ### API 명세서
 
-[index.html](Market%20Wanted%20Backend%20Challenge%2014429d746aff802f9fcced8f69bbb1a8/index.html)
+[index.html](https://github.com/cjw0324/wanted-preonboarding-challenge-backend-26/blob/feature/jaewoo-choi/README/index.html)
 
 *OpenAPI definition by swagger*
 
