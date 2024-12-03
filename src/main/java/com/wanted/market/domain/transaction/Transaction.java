@@ -120,17 +120,17 @@ public class Transaction extends BaseEntity {
 
     private void validateParticipants(Product product, User buyer, User seller) {
         if (product == null || buyer == null || seller == null) {
-            throw new IllegalArgumentException("Product, buyer, and seller must not be null");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
 
         if (buyer.getId().equals(seller.getId())) {
-            throw new IllegalArgumentException("Buyer and seller cannot be the same user");
+            throw new CustomException(ErrorCode.INVALID_TRANSACTION_PARTICIPANT);
         }
     }
 
     private void validatePrice(BigDecimal purchasePrice) {
         if (purchasePrice == null || purchasePrice.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Purchase price must be positive");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
 }
