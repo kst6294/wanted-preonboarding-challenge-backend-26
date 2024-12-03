@@ -1,0 +1,153 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+// Container styles
+.container-lg {
+    max-width: 1012px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 2rem;
+}
+
+// Header styles
+.page-header {
+    padding: 2rem;
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #e1e4e8;
+    margin-bottom: 2rem;
+}
+
+// Main content styles
+.markdown-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    
+    h1 {
+        padding-bottom: 0.3em;
+        font-size: 2em;
+        border-bottom: 1px solid #eaecef;
+    }
+    
+    h2 {
+        padding-bottom: 0.3em;
+        font-size: 1.5em;
+        border-bottom: 1px solid #eaecef;
+    }
+
+    // List styles
+    ul, ol {
+        padding-left: 2em;
+        margin-bottom: 1rem;
+    }
+
+    li {
+        margin: 0.25em 0;
+    }
+}
+
+// Navigation styles
+nav {
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eaecef;
+    text-align: center;
+    
+    a {
+        margin: 0 0.5rem;
+        padding: 0.5rem;
+        color: #0366d6;
+        text-decoration: none;
+        display: inline-block;
+        
+        &:hover {
+            text-decoration: underline;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+        }
+    }
+}
+
+// Links navigation at top
+.site-nav {
+    margin: 1rem 0;
+    padding: 0.5rem 0;
+    font-size: 0.9em;
+    border-bottom: 1px solid #eaecef;
+
+    a {
+        margin: 0 0.3rem;
+        color: #586069;
+        text-decoration: none;
+
+        &:hover {
+            color: #0366d6;
+            text-decoration: underline;
+        }
+    }
+}
+
+// Swagger UI customization
+.swagger-ui {
+    .wrapper {
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .information-container {
+        padding: 20px 0;
+        margin: 0;
+    }
+    
+    .scheme-container {
+        padding: 20px 0;
+        margin: 0;
+    }
+}
+
+// Footer styles
+footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-top: 1px solid #eaecef;
+    text-align: center;
+    color: #586069;
+    font-size: 0.9em;
+
+    a {
+        color: #0366d6;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+    .container-lg {
+        padding: 1rem;
+    }
+
+    .markdown-body {
+        padding: 15px;
+    }
+}

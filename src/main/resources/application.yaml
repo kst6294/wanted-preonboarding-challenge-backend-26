@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: wanted-market
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+    open-in-view: false
+# JWT Configuration
+jwt:
+  secret-key: ZEV2TEx4S0VLU0tFTEtTRUtMU0VMRktTTEZLU0xGS1NMRktTTEtGU0VMRktTTEZLU0xGS1NMRktTTEtGU0xFS1NMRks=
+  token-validity-in-seconds: 86400  # 24시간
+
+logging:
+  level:
+    com.wanted.market: DEBUG
+    org.springframework.security: DEBUG
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+  api-docs:
+    path: /v3/api-docs
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8

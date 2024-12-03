@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title | default: "API Documentation" }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <!-- Swagger UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css">
+    <style>
+        .swagger-ui .topbar { display: none }
+        .swagger-ui .info { margin: 20px 0 }
+        .swagger-ui .scheme-container { margin: 0 }
+        .swagger-ui .wrapper { padding: 0 }
+    </style>
+</head>
+<body>
+    <div class="container-lg px-3 my-5 markdown-body">
+        <header>
+            <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+            <nav>
+                <a href="{{ '/' | relative_url }}">Home</a> |
+                <a href="{{ '/api/' | relative_url }}">API Reference</a> |
+                <a href="{{ '/DEVELOPMENT_LOG.html' | relative_url }}">Development Log</a> |
+                <a href="{{ '/REQUIREMENTS.html' | relative_url }}">Requirements</a> |
+                <a href="{{ '/TODO.html' | relative_url }}">Todo</a>
+            </nav>
+        </header>
+        <main>
+            {{ content }}
+            <div id="swagger-ui"></div>
+        </main>
+        <footer>
+            <p>Maintained by <a href="https://github.com/doxxx93">doxxx93</a></p>
+        </footer>
+    </div>
+    <!-- Swagger UI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-standalone-preset.min.js"></script>
+    <script>
+        window.onload = function() {
+            const ui = SwaggerUIBundle({
+                url: "{{ '/api/openapi.json' | relative_url }}",
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "BaseLayout",
+                docExpansion: "list",
+                showCommonExtensions: true
+            });
+            window.ui = ui;
+        };
+    </script>
+</body>
+</html>

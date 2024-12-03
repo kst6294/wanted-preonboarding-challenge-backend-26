@@ -1,0 +1,26 @@
+title: Wanted Market Documentation
+description: Documentation for the Wanted Market API and implementation
+theme: jekyll-theme-cayman
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Plugin settings
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Site settings
+url: "https://doxxx-playground.github.io"
+baseurl: "/wanted-preonboarding-challenge-backend-26"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .git

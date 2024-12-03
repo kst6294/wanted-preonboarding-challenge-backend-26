@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+    {% endif %}
+    <title>{{ page.title | default: site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+    <div class="container-lg px-3 my-5 markdown-body">
+        <header>
+            <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+            {% if site.description %}
+            <p>{{ site.description }}</p>
+            {% endif %}
+            <nav>
+                <a href="{{ '/' | relative_url }}">Home</a> |
+                <a href="{{ '/api/' | relative_url }}">API Reference</a> |
+                <a href="{{ '/DEVELOPMENT_LOG.html' | relative_url }}">Development Log</a> |
+                <a href="{{ '/REQUIREMENTS.html' | relative_url }}">Requirements</a> |
+                <a href="{{ '/TODO.html' | relative_url }}">Todo</a>
+            </nav>
+        </header>
+        <main>
+            {{ content }}
+        </main>
+        <footer>
+            <p>Maintained by <a href="https://github.com/doxxx93">doxxx93</a></p>
+        </footer>
+    </div>
+</body>
+</html>

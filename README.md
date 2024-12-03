@@ -1,44 +1,133 @@
-# 원티드 프리온보딩 챌린지 백엔드 26 사전과제
+# Wanted Market API
 
-### 설명
-지난 스프린트에서 사용자간에 물건을 거래할 수 있는 Wanted Market API를 개발했습니다. <br>
-이번 스프린트에서는 결제 플랫폼, 포트원(구 아임포트)을 사용해서 결제 프로세스를 구현하려합니다. <br>
-[포트원개발자센터](https://developers.portone.io/opi/ko/readme?v=v1)의 결제연동 문서를 확인하여 기본적인 결제 프로세스를 구축해주세요.
+전자상거래 플랫폼을 위한 RESTful API 서버입니다.
 
-<br>
-<br>
+## 기술 스택
+
+### Backend Framework & Libraries
+
+- Java 17
+- Spring Boot 3.4.0
+- Spring Security + JWT (0.12.6)
+- Spring Data JPA
+- Spring Validation
+- Spring Docker Compose
+- Lombok
+
+### Database
+
+- MySQL
+- Redis
+- H2 (테스트용)
+
+### Documentation
+
+- SpringDoc OpenAPI (Swagger) 2.7.0
+
+## 프로젝트 구조
+
+```txt
+com.wanted.market
+├──common
+│   ├──dto         // 공통 응답 객체
+│   └──exception   // 전역 예외 처리
+├──config
+│   ├──security    // JWT 인증, 보안 설정
+│   ├──JpaConfig
+│   └──OpenApiConfig
+└──domain
+    ├──base        // 기본 엔티티 설정
+    ├──product     // 상품 도메인
+    ├──transaction // 거래 도메인
+    └──user        // 사용자 도메인
+```
+
+## 주요 기능
+
+### 사용자 (User)
+
+- 회원가입
+- 로그인 (JWT 토큰 발급)
+- 사용자 정보 조회
+
+### 상품 (Product)
+
+- 상품 등록/수정/삭제
+- 상품 목록 조회
+- 상품 상세 조회
+
+### 거래 (Transaction)
+
+- 거래 생성
+- 거래 상태 관리
+- 거래 내역 조회
+
+## 실행 방법
 
 ### 요구사항
 
-0. 시간적 여유가 된다면 지난 과제를 진행해주세요. => [지난과제 바로가기](https://github.com/kst6294/wanted-preonboarding-challenge-backend-20) <br>
-0-1. 지난 과제를 진행했다면, 용품을 구매할 때 결제가 진행되도록 해주세요. <br>
-0-2. 지난 과제를 진행하지 않았다면, 바로 결제를 위한 기능을 구현해주세요.
-1. v1, v2 모두 사용가능하지만 우선은 v1을 기준으로 진행해주세요.
-2. 사용자간 거래에서 결제플랫폼을 통해 결제를 진행합니다.
-3. 결제진행, 가상계좌, 결제취소 기능을 개발해주세요. (변경: 계좌이체 -> 가상계좌) <br>
-3-1. 이 과정에서 결제 대행사는 임의로 설정하셔도 괜찮습니다. <br>
-4. 결제연동문서를 자세히 보고 단순 기능 추가가 아닌 실제 결제가 진행된다는 관점에서 기능을 구현해주세요.
-5. 다른 참여자분들의 PR을 읽어보면서 의견을 주고 받아주세요.
-6. 개발 과정에서 어려웠던 부분이 있었다면, 기록을 남겨주세요.
+- Java 17
+- Docker
 
-### 업데이트
-- 24.11.25: 가상계좌 생성, 결제 취소 요청/응답 결과 확인을 위한 Fake 서버 배포 예정(곧 배포)
+### 데이터베이스 실행
 
+```bash
+docker-compose up -d
+```
 
-#### 참고사항
-- 포트원 회원가입을 하지 않아도 됩니다.
-- 실제 결제가 진행되지 않아도 됩니다.
-- 결제, 취소, 계좌이체를 진행할 때 고려해야할 요소가 무엇이 있을지 고민해보시면 좋겠습니다.
-- 정답은 없습니다.
+### 애플리케이션 실행
 
+```bash
+./gradlew bootRun
+```
 
-<br>
-<br>
+## API Documentation
 
+API 문서는 [여기](https://doxxx-playground.github.io/wanted-preonboarding-challenge-backend-26)에서 확인하실 수 있습니다.
+- [OpenAPI Specification (JSON)](docs/api/openapi.json)
 
-### 제출방법
-- 이 Repository 를 fork 해주세요.
-- feature/{name} 으로 브랜치를 생성해주세요. 예: feature/suntae-kim
-- 과제를 진행해주세요.
-- 소스코드를 Push 하고 PR을 올려주세요.
-- 요구사항에 대해서 궁금한 점이나 이해가 안되는 부분이 있다면 이슈를 남겨주시거나, 편하게 연락주세요 - kst6294@gmail.com
+### 주요 API 엔드포인트
+
+#### 사용자 API
+- `POST /api/users/signup` - 회원가입
+- `POST /api/users/login` - 로그인
+
+#### 상품 API
+- `GET /api/products` - 상품 목록 조회
+- `POST /api/products` - 상품 등록
+
+#### 거래 API
+- `POST /api/transactions` - 거래 생성
+- `PATCH /api/transactions/{id}/status` - 거래 상태 변경
+
+## 테스트
+
+```bash
+./gradlew test
+```
+
+- Repository 레이어 테스트 구현 완료
+- JUnit 5 기반 테스트
+- H2 인메모리 데이터베이스 사용
+
+## 개발 로그
+
+자세한 개발 과정과 의사결정은 [DEVELOPMENT_LOG.md](docs/DEVELOPMENT_LOG.md)를 참고해주세요.
+
+## 요구사항
+
+프로젝트의 상세 요구사항은 [REQUIREMENTS.md](docs/REQUIREMENTS.md)에서 확인하실 수 있습니다.
+
+# 원티드 프리온보딩 챌린지 백엔드 사전과제
+
+## 개발 로그
+
+프로젝트 진행 상황과 의사결정 과정은 [DEVELOPMENT_LOG.md](docs/DEVELOPMENT_LOG.md)에서 확인하실 수 있습니다.
+
+## 요구사항
+
+프로젝트의 요구사항은 [REQUIREMENTS.md](docs/REQUIREMENTS.md)에서 확인하실 수 있습니다.
+
+## TODO 목록
+
+프로젝트의 TODO 목록은 [TODO.md](docs/TODO.md)에서 확인하실 수 있습니다.
