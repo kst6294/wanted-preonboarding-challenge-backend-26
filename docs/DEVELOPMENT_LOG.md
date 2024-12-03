@@ -572,3 +572,107 @@ JPA Auditing 설정과 Base Entity를 구현했습니다:
     - E2E 시나리오 테스트
     - 성능/부하 테스트
     - 보안 취약점 테스트
+
+## 9. 결제 시스템 POC (2024-12-03)
+
+![img.png](img.png)
+
+### 9.1 결제 연동 분석
+
+1. **결제 흐름 분석**
+    - 현재 거래 상태: REQUESTED -> APPROVED -> CONFIRMED -> COMPLETED
+    - 결제 프로세스 상태: READY -> PENDING -> PAID -> CANCELLED/FAILED
+    - 통합 고려사항:
+        * 거래 생성과 결제 시작의 연동
+        * 결제 완료와 거래 상태 동기화
+        * 결제 실패/취소 시 거래 처리
+
+2. **기술 스택 검토**
+    - 현재 시스템:
+        * Spring Boot / JPA
+        * Spring Security (JWT)
+        * MySQL
+    - 추가 필요 스택:
+        * RestClient (포트원 API 연동)
+        * ObjectMapper (JSON 처리)
+        * 웹훅 처리를 위한 API 엔드포인트
+
+### 9.2 도메인 설계
+
+1. **Payment 엔티티**
+
+```java
+
+@Entity
+@Table(name = "payments")
+public class Payment extends BaseEntity {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(unique = true)
+    private String merchantUid; // 주문번호
+
+    private String impUid;     // 포트원 결제번호
+
+    @OneToOne(fetch = LAZY)
+    private Transaction transaction;
+
+    @Enumerated(STRING)
+    private PaymentStatus status;
+
+    private BigDecimal amount;
+
+    // 가상계좌 정보
+    private String vbankCode;    // 은행코드
+    private String vbankNumber;  // 계좌번호
+    private String vbankHolder;  // 예금주
+    private LocalDateTime vbankExpireAt; // 입금기한
+}
+```
+
+2. **결제 상태**
+
+```java
+public enum PaymentStatus {
+    READY,      // 결제 준비
+    PENDING,    // 가상계좌 발급
+    PAID,       // 결제 완료
+    FAILED,     // 결제 실패
+    CANCELLED   // 결제 취소
+}
+```
+
+### 9.3 주요 기술적 과제
+
+1. **트랜잭션 관리**
+    - 결제-거래 상태 동기화
+    - 동시성 제어 (낙관적 락 활용)
+    - 결제 실패 시 롤백 처리
+
+2. **가상계좌 처리**
+    - 발급/입금 웹훅 처리
+    - 입금 기한 관리
+    - 미입금 취소 처리
+
+3. **결제 검증**
+    - 금액 일치 검증
+    - 주문번호 검증
+    - 위변조 방지
+
+### 9.4 구현 계획
+
+1. **Phase 1: 기본 결제 연동**
+    - Payment 도메인 구현
+    - 포트원 API 클라이언트 구현
+    - 가상계좌 발급 프로세스
+
+2. **Phase 2: 웹훅 처리**
+    - 웹훅 엔드포인트 구현
+    - 결제 상태 동기화
+    - 결제 검증 로직
+
+3. **Phase 3: 결제 취소**
+    - 결제 취소 API 연동
+    - 거래 상태 처리
+    - 환불 정책 구현
