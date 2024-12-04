@@ -54,8 +54,6 @@ Wanted Market은 사용자간 거래가 가능한 온라인 마켓플레이스 A
 - 결제 상태 관리
 - 결제 취소 처리
 
-
-
 ## 실행 방법
 
 ### 요구사항
@@ -78,21 +76,31 @@ docker-compose up -d
 ## API Documentation
 
 API 문서는 [여기](https://doxxx-playground.github.io/wanted-preonboarding-challenge-backend-26)에서 확인하실 수 있습니다.
+
 - [OpenAPI Specification (JSON)](docs/api/openapi.json)
 
 ### 주요 API 엔드포인트
 
 #### 사용자 API
+
 - `POST /api/users/signup` - 회원가입
 - `POST /api/users/login` - 로그인
 
 #### 상품 API
+
 - `GET /api/products` - 상품 목록 조회
 - `POST /api/products` - 상품 등록
 
 #### 거래 API
+
 - `POST /api/transactions` - 거래 생성
 - `PATCH /api/transactions/{id}/status` - 거래 상태 변경
+
+#### 결제 API
+
+- `POST /api/payments` - 결제 생성 (가상계좌 발급)
+- `PATCH /api/payments/{merchant_uid}/confirm` - 결제 확인
+- `POST /api/payments/{merchant_uid}/cancel` - 결제 취소
 
 ## 테스트
 
