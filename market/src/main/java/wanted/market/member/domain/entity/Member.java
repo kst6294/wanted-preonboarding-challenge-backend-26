@@ -24,4 +24,10 @@ public class Member {
     @Column(name = "member_name", unique = true, nullable = false)
     private String memberName;
 
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

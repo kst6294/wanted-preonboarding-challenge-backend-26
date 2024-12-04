@@ -12,6 +12,17 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/webjars/**", "/v3/api-docs/**", "/swagger-ui/**", "/", "/member/signup", "/login/**", "/error", "/item/items","/item/info","/portone/**");
+                .excludePathPatterns("/webjars/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/",
+                        "/member/signup",
+                        "/login/**",
+                        "/error",
+                        "/item/items",
+                        "/item/info",
+                        "/portone/**",
+                        "/member/reset/**"
+                );
     }
 }

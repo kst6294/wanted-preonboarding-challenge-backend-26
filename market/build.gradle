@@ -54,6 +54,9 @@ dependencies {
 
 	// 포트원 REST API
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
+
+	// E-mail 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wanted.market.member.domain.dto.request.MemberRequestDto;
+import wanted.market.member.domain.dto.request.NewPasswordRequestDto;
+import wanted.market.member.domain.dto.response.ResetPasswordResultResponseDto;
+import wanted.market.member.domain.dto.response.service.ResetPasswordResultServiceDto;
 import wanted.market.member.domain.entity.Member;
 import wanted.market.member.repository.MemberRepository;
 
-import java.util.List;
 
 @Slf4j
 @Service
@@ -25,6 +27,7 @@ public class MemberService {
                 .loginId(requestDto.getLogin_id())
                 .password(requestDto.getPassword())
                 .memberName(requestDto.getUsername())
+                .email(requestDto.getEmail())
                 .build();
         return memberRepository.save(member);
 
@@ -41,4 +44,17 @@ public class MemberService {
         memberRepository.delete(member);
         return true;
     }
+
+    @Transactional
+    public ResetPasswordResultServiceDto resetNewPassword(String newPassword, Long userId) {
+        try {
+            Member findMember = memberRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 계정을 찾을 수 없습니다."));
+            findMember.setPassword(newPassword);
+            log.info("DB 에서 pw 변경 완료");
+            return new ResetPasswordResultServiceDto(findMember.getId(), true);
+        } catch (RuntimeException e) {
+            return new ResetPasswordResultServiceDto(null, false);
+        }
+    }
+
 }

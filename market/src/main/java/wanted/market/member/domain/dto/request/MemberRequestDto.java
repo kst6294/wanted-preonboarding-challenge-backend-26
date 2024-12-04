@@ -11,4 +11,6 @@ public class MemberRequestDto {
     private String password;
     @NotBlank
     private String username;
+    @NotBlank
+    private String email;
 }
