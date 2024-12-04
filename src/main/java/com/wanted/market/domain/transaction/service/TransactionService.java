@@ -79,17 +79,6 @@ public class TransactionService {
     }
 
     /**
-     * 거래 정보를 조회합니다.
-     * 요구사항 6: 당사자간 거래내역 확인
-     */
-    public TransactionResponse getTransaction(Long userId, Long transactionId) {
-        Transaction transaction = getTransactionOrThrow(transactionId);
-        validateTransactionAccess(transaction, getUserOrThrow(userId));
-
-        return TransactionResponse.from(transaction);
-    }
-
-    /**
      * 구매자의 거래 내역을 조회합니다.
      * 요구사항 7: 구매한 용품 목록 조회
      */
@@ -128,8 +117,8 @@ public class TransactionService {
      * 상품의 거래 내역을 조회합니다.
      * 요구사항 6: 상품 상세정보의 거래내역 확인
      */
-    public Page<TransactionResponse> getProductTransactions(Long userId, Long productId, Pageable pageable) {
-        User user = getUserOrThrow(userId);
+    public Page<TransactionResponse> getProductTransactions(String email, Long productId, Pageable pageable) {
+        User user = getUserOrThrow(email);
         Product product = getProductOrThrow(productId);
 
         validateProductAccess(product, user);
@@ -138,8 +127,8 @@ public class TransactionService {
                 .map(TransactionResponse::from);
     }
 
-    private User getUserOrThrow(Long userId) {
-        return userRepository.findById(userId)
+    private User getUserOrThrow(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
@@ -205,7 +194,8 @@ public class TransactionService {
         }
     }
 
-    private void validateTransactionAccess(Transaction transaction, User user) {
+    private void validateTransactionAccess(Long transactionId, User user) {
+        Transaction transaction = getTransactionOrThrow(transactionId);
         if (!transaction.isBuyerMatch(user) && !transaction.isSellerMatch(user)) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_TRANSACTION_ACCESS);
         }
@@ -246,5 +236,14 @@ public class TransactionService {
                 product.updateStatus(ProductStatus.COMPLETED);
             }
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Transaction getTransactionForPayment(String email, Long transactionId) {
+        // 1. 권한 검증 (기존 getTransaction 메서드 활용)
+        validateTransactionAccess(transactionId, getUserOrThrow(email));  // 권한 없으면 예외 발생
+
+        // 2. 실제 Entity 조회 및 반환
+        return getTransactionOrThrow(transactionId);
     }
 }

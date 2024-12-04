@@ -29,3 +29,7 @@ springdoc:
     path: /v3/api-docs
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
+
+portone:
+  api:
+    base-url: "https://api.portone.io/v1"

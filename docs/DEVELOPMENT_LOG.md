@@ -676,3 +676,157 @@ public enum PaymentStatus {
     - 결제 취소 API 연동
     - 거래 상태 처리
     - 환불 정책 구현
+
+## 10. 결제 시스템 구현 (2024-12-04)
+
+### 10.1 결제 시스템 설계
+
+기존의 거래 시스템을 기반으로 포트원 결제 시스템을 추가했습니다. 실제 결제가 이루어지는 것을 가정하고 Mock 구현을 진행했습니다.
+
+1. **Payment 도메인 구현**
+    - Payment 엔티티
+    - PaymentStatus enum
+    - PaymentMethod enum
+    - 가상계좌 관련 필드 추가
+
+2. **결제 상태 관리**
+    ```java
+    public enum PaymentStatus {
+        READY,          // 결제 준비 상태
+        PENDING,        // 가상계좌 발급됨
+        PAID,           // 결제 완료
+        FAILED,         // 결제 실패
+        CANCELLED,      // 결제 취소됨
+        REFUNDED        // 환불 완료
+    }
+    ```
+
+3. **Mock PG 연동**
+    - MockPortOneApiService 구현
+    - 가상계좌 발급 시뮬레이션
+    - 결제 검증 로직 Mock 구현
+    - 결제 취소 처리 Mock 구현
+
+### 10.2 인프라 개선
+
+1. **RestClient 도입**
+    - Spring 6의 RestClient 사용
+    - RestTemplate 대체
+    - HTTP 인터페이스 클라이언트 지원
+
+2. **설정 관리**
+    ```java
+    @Configuration
+    public class RestClientConfig {
+        @Bean
+        public RestClient portOneRestClient() {
+            return RestClient.builder()
+                .baseUrl("https://api.portone.io/v1")
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+        }
+    }
+    ```
+
+### 10.3 주요 기능 구현
+
+1. **결제 생성 및 가상계좌 발급**
+    ```java
+    @Transactional
+    public Payment createPayment(Transaction transaction) {
+        String merchantUid = generateMerchantUid();
+        
+        Payment payment = Payment.builder()
+            .transaction(transaction)
+            .merchantUid(merchantUid)
+            .amount(transaction.getPurchasePrice())
+            .build();
+
+        return paymentRepository.save(payment);
+    }
+    ```
+
+2. **결제 상태 관리**
+    - READY → PENDING: 가상계좌 발급 시
+    - PENDING → PAID: 입금 완료 시
+    - PAID → CANCELLED: 결제 취소 시
+
+3. **동시성 제어**
+    - 낙관적 락(@Version) 도입
+    - 결제 상태 변경 시 충돌 방지
+
+### 10.4 고려한 핵심 요소들
+
+1. **결제 안정성**
+    - 중복 결제 방지
+    - 결제 금액 검증
+    - 결제 상태 추적
+
+2. **에러 처리**
+    - 결제 실패 시 거래 상태 처리
+    - 검증 실패 시 예외 처리
+    - 상태 변경 예외 관리
+
+3. **확장성**
+    - 실제 PG사 연동을 고려한 구조
+    - 다양한 결제 수단 추가 가능
+    - 웹훅 처리를 위한 준비
+
+### 10.5 테스트 코드 개선
+
+1. **테스트 Fixture 패턴 도입**
+    ```java
+    public static class PaymentBuilder {
+        private Transaction transaction;
+        private PaymentStatus status = PaymentStatus.READY;
+        // ... 필드들
+        
+        public PaymentBuilder withVirtualAccount() {
+            this.virtualAccount = "0123456789";
+            this.status = PaymentStatus.PENDING;
+            // ... 가상계좌 정보 설정
+            return this;
+        }
+
+        public PaymentBuilder withConfirmedPayment() {
+            withVirtualAccount();
+            this.impUid = "imp_" + TestFixture.nextId();
+            this.status = PaymentStatus.PAID;
+            return this;
+        }
+        // ... 다른 builder 메서드들
+    }
+    ```
+
+2. **상태 변화 테스트 강화**
+    - READY → PENDING: 가상계좌 발급 검증
+    - PENDING → PAID: 결제 완료 검증
+    - PAID → CANCELLED: 취소 처리 검증
+    - 잘못된 상태 변경 시도에 대한 예외 검증
+
+3. **Mock 응답 처리 개선**
+    - PG사 API 응답 시뮬레이션
+    - 결제 검증 실패 케이스 처리
+    - Repository save 결과값 처리
+
+4. **테스트 가독성 향상**
+    - BDD 스타일 테스트 구조화
+    - 명확한 테스트 시나리오 기술
+    - 상태 변화를 명시적으로 표현
+
+5. **테스트 격리성 강화**
+    - 테스트 데이터 생성 로직 중앙화
+    - ID 생성 방식 일원화
+    - ReflectionTestUtils를 통한 안전한 상태 주입
+
+### 10.6 다음 개선 계획
+
+1. **테스트 커버리지 확대**
+    - 엣지 케이스 테스트 추가
+    - 동시성 관련 테스트 보강
+    - 통합 테스트 시나리오 확대
+
+2. **결제 시스템 보완**
+    - 결제 실패 복구 메커니즘
+    - 결제 타임아웃 처리
+    - 결제 이력 관리 기능

@@ -32,8 +32,19 @@ public enum ErrorCode {
     INVALID_STATUS_UPDATE(HttpStatus.BAD_REQUEST, "잘못된 거래 상태 변경입니다"),
     UNAUTHORIZED_TRANSACTION_ACCESS(HttpStatus.FORBIDDEN, "해당 거래에 대한 접근 권한이 없습니다"),
 
+    // Payment 도메인
+    PAYMENT_VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "결제 검증에 실패했습니다"),
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "결제 정보를 찾을 수 없습니다"),
+    PAYMENT_ALREADY_CONFIRMED(HttpStatus.BAD_REQUEST, "이미 승인된 결제입니다"),
+    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "결제 금액이 일치하지 않습니다"),
+    PAYMENT_STATUS_MISMATCH(HttpStatus.BAD_REQUEST, "결제 상태가 일치하지 않습니다"),
+    PAYMENT_FAILED(HttpStatus.BAD_REQUEST, "결제에 실패했습니다"),
+    INVALID_PAYMENT_STATUS(HttpStatus.BAD_REQUEST, "잘못된 결제 상태입니다"),
+
     // 5XX Server Error
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다"),
+    EXTERNAL_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "외부 API 호출에 실패했습니다"),
+    ;
 
     private final HttpStatus status;
     private final String message;
