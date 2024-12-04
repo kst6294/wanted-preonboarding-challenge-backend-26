@@ -55,9 +55,8 @@ public class MemberController {
 
     //비밀번호 재설정을 위한 이메일 인증 - 인증 메일 전송
     @PostMapping("/reset/password/request")
-    public ResponseEntity<ResetPasswordUserResponseDto> resetPasswordRequest(ResetPasswordRequestDto dto, HttpServletRequest request) {
-        Long memberId = getMemberIdFromSession(request);
-        ResetPasswordServiceDto sendMailResponse = emailService.sendMail(memberId, dto);
+    public ResponseEntity<ResetPasswordUserResponseDto> resetPasswordRequest(ResetPasswordRequestDto dto) {
+        ResetPasswordServiceDto sendMailResponse = emailService.sendMail(dto);
         validationNumber = sendMailResponse.getValidationNumber();
         if (Objects.nonNull(validationNumber)) {
             return ResponseEntity.ok(new ResetPasswordUserResponseDto(true, "인증 메일이 전송되었습니다."));
@@ -68,7 +67,7 @@ public class MemberController {
 
     @GetMapping("/reset/password/validation")
     public ResponseEntity<ResetPasswordValidationResponseDto> resetPasswordValidation(ResetPasswordValidationRequestDto dto, HttpServletRequest request) {
-        ResetPasswordValidationServiceDto validationResult = emailService.mailValidationCompareToNumber(getMemberIdFromSession(request), dto, validationNumber);
+        ResetPasswordValidationServiceDto validationResult = emailService.mailValidationCompareToNumber(dto, validationNumber);
         if (validationResult.isResetSuccess() == true) {
             uuid = UUID.randomUUID().toString();
             log.info("password 재설정을 위한 uuid 발급 성공 : userId : {} , uuid : {} ", validationResult.getUserId(), uuid);

@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ResetPasswordValidationRequestDto {
-    private String userId;
+    private String userLoginId;
     private Integer validationNumber;
 }

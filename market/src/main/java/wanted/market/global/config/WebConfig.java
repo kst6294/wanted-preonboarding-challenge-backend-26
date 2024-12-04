@@ -22,7 +22,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/item/items",
                         "/item/info",
                         "/portone/**",
-                        "/member/reset/**"
+                        "/member/reset/**",
+                        "/favicon.ico"
                 );
     }
 }

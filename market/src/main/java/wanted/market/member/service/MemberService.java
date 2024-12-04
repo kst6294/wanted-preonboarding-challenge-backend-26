@@ -2,6 +2,7 @@ package wanted.market.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wanted.market.member.domain.dto.request.MemberRequestDto;
@@ -17,6 +18,7 @@ import wanted.market.member.repository.MemberRepository;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Member memberJoin(MemberRequestDto requestDto) {
@@ -25,7 +27,7 @@ public class MemberService {
         }
         Member member = Member.builder()
                 .loginId(requestDto.getLogin_id())
-                .password(requestDto.getPassword())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
                 .memberName(requestDto.getUsername())
                 .email(requestDto.getEmail())
                 .build();
@@ -49,7 +51,7 @@ public class MemberService {
     public ResetPasswordResultServiceDto resetNewPassword(String newPassword, Long userId) {
         try {
             Member findMember = memberRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 계정을 찾을 수 없습니다."));
-            findMember.setPassword(newPassword);
+            findMember.setPassword(passwordEncoder.encode(newPassword));
             log.info("DB 에서 pw 변경 완료");
             return new ResetPasswordResultServiceDto(findMember.getId(), true);
         } catch (RuntimeException e) {

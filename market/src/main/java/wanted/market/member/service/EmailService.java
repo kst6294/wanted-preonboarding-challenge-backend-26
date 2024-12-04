@@ -55,32 +55,21 @@ public class EmailService {
     }
 
 
-    private Member memberValidation(Long memberId, String loginId) {
-        Member reSetPasswordMember = memberRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new RuntimeException("비밀번호를 재설정 하려는 user ID 를 찾을 수 없음. 등록된 회원이 아님."));
-        if (!reSetPasswordMember.getId().equals(memberId)) {
-            throw new RuntimeException("비밀번호 재설정 사용자와 요청 사용자가 다름");
-        }
-        return reSetPasswordMember;
-    }
-
     @Transactional
-    public ResetPasswordServiceDto sendMail(Long memberId, ResetPasswordRequestDto dto) {
+    public ResetPasswordServiceDto sendMail(ResetPasswordRequestDto dto) {
         try {
-            Member resetPwMember = memberValidation(memberId, dto.getUserId());
+            Member resetPwMember = memberRepository.findByLoginIdAndEmail(dto.getUserLoginId(), dto.getUserEmail()).orElseThrow(() -> new RuntimeException("비밀번호를 재설정 하려는 회원 정보를 찾을 수 없습니다."));
             MimeMessage message = createMail(resetPwMember.getEmail());
             javaMailSender.send(message);
+            log.info("비밀번호 재설정을 위한 인증번호 발송 : EMAIL : {}" , resetPwMember.getEmail());
             return new ResetPasswordServiceDto(resetPwMember.getId(), true, number);
         } catch (RuntimeException e) {
             return new ResetPasswordServiceDto(null,false, null);
         }
-
-
     }
 
-    public ResetPasswordValidationServiceDto mailValidationCompareToNumber(Long userSessionId, ResetPasswordValidationRequestDto dto, Integer validationNumber) {
-
-        Member resetPasswordMember = memberValidation(userSessionId, dto.getUserId());
+    public ResetPasswordValidationServiceDto mailValidationCompareToNumber(ResetPasswordValidationRequestDto dto, Integer validationNumber) {
+        Member resetPasswordMember = memberRepository.findByLoginId(dto.getUserLoginId()).orElseThrow(() -> new RuntimeException("일치하는 회원 정보가 없습니다."));
         if (validationNumber == number) {
             return new ResetPasswordValidationServiceDto(resetPasswordMember.getId(), true, "메일 인증에 성공하였습니다.");
         }
