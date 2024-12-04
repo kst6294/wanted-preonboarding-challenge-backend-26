@@ -830,3 +830,59 @@ public enum PaymentStatus {
     - 결제 실패 복구 메커니즘
     - 결제 타임아웃 처리
     - 결제 이력 관리 기능
+
+## ERD
+
+```mermaid
+erDiagram
+    User ||--o{ Product: sells
+    User ||--o{ Transaction: participates
+    Product ||--o{ Transaction: involves
+    Transaction ||--|| Payment: has
+
+    User {
+        Long id PK
+        String email UK
+        String password
+        String name
+        LocalDateTime createdAt
+        LocalDateTime updatedAt
+    }
+
+    Product {
+        Long id PK
+        String name
+        BigDecimal price
+        ProductStatus status
+        Long sellerId FK
+        Integer quantity
+        LocalDateTime createdAt
+        LocalDateTime updatedAt
+    }
+
+    Transaction {
+        Long id PK
+        Long productId FK
+        Long buyerId FK
+        Long sellerId FK
+        TransactionStatus status
+        BigDecimal purchasePrice
+        LocalDateTime createdAt
+        LocalDateTime updatedAt
+    }
+
+    Payment {
+        Long id PK
+        Long transactionId FK
+        String merchantUid UK
+        String impUid UK
+        BigDecimal amount
+        PaymentMethod method
+        PaymentStatus status
+        String virtualAccount
+        String virtualBankCode
+        String virtualBankName
+        LocalDateTime virtualDueDate
+        Long version
+    }
+```
