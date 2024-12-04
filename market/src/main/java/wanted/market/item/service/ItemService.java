@@ -16,7 +16,6 @@ import wanted.market.item.repository.ItemRepository;
 import wanted.market.member.repository.MemberRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,6 +35,8 @@ public class ItemService {
                 .status(ItemStatus.ONSALE)
                 .build();
         itemRepository.save(item);
+        item.setCreateDateTime();
+        item.setLastModifiedDateTime();
         return new ItemCreateResponseDto(true, item.getId(), item.getItemName());
     }
 
@@ -57,6 +58,7 @@ public class ItemService {
         updateItem.setItemName(itemDto.getItemName());
         updateItem.setPrice(itemDto.getPrice());
         updateItem.setQuantity(itemDto.getQuantity());
+        updateItem.setLastModifiedDateTime();
         return new ItemUpdateResponseDto(true, updateItem.getId(), updateItem.getItemName(), updateItem.getPrice(), updateItem.getQuantity());
     }
 

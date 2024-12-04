@@ -31,6 +31,8 @@ public class MemberService {
                 .memberName(requestDto.getUsername())
                 .email(requestDto.getEmail())
                 .build();
+        member.setCreateDateTime();
+        member.setLastModifiedDateTime();
         return memberRepository.save(member);
 
     }
@@ -52,7 +54,7 @@ public class MemberService {
         try {
             Member findMember = memberRepository.findById(userId).orElseThrow(() -> new RuntimeException("해당 계정을 찾을 수 없습니다."));
             findMember.setPassword(passwordEncoder.encode(newPassword));
-            log.info("DB 에서 pw 변경 완료");
+            findMember.setLastModifiedDateTime();
             return new ResetPasswordResultServiceDto(findMember.getId(), true);
         } catch (RuntimeException e) {
             return new ResetPasswordResultServiceDto(null, false);

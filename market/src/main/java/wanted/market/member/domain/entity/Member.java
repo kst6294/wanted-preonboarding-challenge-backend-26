@@ -2,6 +2,7 @@ package wanted.market.member.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import wanted.market.global.domain.BaseEntity;
 
 @Entity
 @Getter
@@ -9,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "member_id")

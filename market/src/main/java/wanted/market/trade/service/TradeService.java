@@ -63,11 +63,14 @@ public class TradeService {
                 .buyer(memberRepository.findById(buyerId)
                         .orElseThrow(() -> new RuntimeException("구매자 정보를 찾을 수 없음")))
                 .build();
+        trade.setCreateDateTime();
+        trade.setLastModifiedDateTime();
         Trade savedTrade = tradeRepository.save(trade);
 
         try {
             String merchantUid = portoneService.prePurchase(BigDecimal.valueOf(savedTrade.getPrice()));
             savedTrade.setMerchantUid(merchantUid);
+            return new TradeBuyResponseDto(savedTrade.getId(), savedTrade.getItem().getId(), merchantUid, savedTrade.getPrice(), savedTrade.getStatus());
         } catch (IamportResponseException e) {
             throw new RuntimeException("IamPort 연결 실패");
         } catch (IOException e) {
@@ -75,7 +78,6 @@ public class TradeService {
         }
 
 
-        return new TradeBuyResponseDto(savedTrade.getId(), savedTrade.getItem().getId(), savedTrade.getStatus());
     }
 
     /**
@@ -95,7 +97,8 @@ public class TradeService {
             trade.setStatusCancel();
             portoneService.refund(tradeId);
         }
-        return new TradeBuyResponseDto(trade.getId(), trade.getItem().getId(), trade.getStatus());
+        trade.setLastModifiedDateTime();
+        return new TradeBuyResponseDto(trade.getId(), trade.getItem().getId(), trade.getMerchantUid(), trade.getPrice(), trade.getStatus());
     }
 
     /**
@@ -111,7 +114,8 @@ public class TradeService {
         trade.setStatusEND();
         Item item = trade.getItem();
         item.setStatusCOMPLETE();
-        return new TradeBuyResponseDto(trade.getId(), trade.getItem().getId(), trade.getStatus());
+        trade.setLastModifiedDateTime();
+        return new TradeBuyResponseDto(trade.getId(), trade.getItem().getId(), trade.getMerchantUid(), trade.getPrice(), trade.getStatus());
     }
 
     @Transactional

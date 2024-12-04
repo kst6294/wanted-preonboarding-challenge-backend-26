@@ -9,5 +9,7 @@ import wanted.market.trade.domain.entity.TradeStatus;
 public class TradeBuyResponseDto {
     private Long tradeId;
     private Long itemId;
+    private String merchantUid;
+    private int price;
     private TradeStatus status;
 }

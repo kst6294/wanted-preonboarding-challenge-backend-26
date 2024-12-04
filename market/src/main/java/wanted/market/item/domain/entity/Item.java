@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import wanted.market.global.domain.BaseEntity;
 import wanted.market.member.domain.entity.Member;
 
 import static jakarta.persistence.FetchType.*;
@@ -16,7 +17,7 @@ import static jakarta.persistence.FetchType.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "item")
-public class Item {
+public class Item extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "item_id")
