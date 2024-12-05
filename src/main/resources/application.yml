@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: wanted-market
+  output:
+    ansi:
+      enabled: always
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:market
+    username: sa
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        highlight_sql: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:db/data.sql
+
+imp:
+  api:
+    v1:
+      key: imp_apikey
+      secret: ekKoeW8RyKuT0zgaZsUtXXTLQ4AhPFW
