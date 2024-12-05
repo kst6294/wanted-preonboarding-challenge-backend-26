@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{iamport, jquery-1.12.4, jquery-3.6.0}" />
+    <file url="file://$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main" libraries="{iamport, jquery-1.12.4, jquery-3.6.0}" />
+    <file url="file://$PROJECT_DIR$/src/main" libraries="{iamport, jquery-1.12.4, jquery-3.6.0}" />
+  </component>
+</project>
