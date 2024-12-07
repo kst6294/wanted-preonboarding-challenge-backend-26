@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "marketapi"
+version = "0.1.0"
+description = ""
+authors = ["socar-bennett <bennett@socar.kr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.115.5"
+uvicorn = "^0.32.0"
+sqlalchemy = "^2.0.36"
+py-ulid = "^1.0.3"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+mysql-connector-python = "^9.1.0"
+bcrypt = "4.0.1"
+fastapi-utils = "^0.8.0"
+typing-inspect = "^0.9.0"
+dependency-injector = "^4.43.0"
+pydantic = {extras = ["email"], version = "^2.10.2"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-multipart = "^0.0.17"
+strenum = "^0.4.15"
+pytest = "^8.3.3"
+httpx = "^0.28.0"
+black = "^24.10.0"
+isort = "^5.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
